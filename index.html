@@ -126,8 +126,8 @@ main{max-width:800px;margin:0 auto;padding:1.5rem}
         <b id="sb-email"></b><br>
         <span id="sb-score">0 reponse(s) enregistree(s)</span>
       </div>
-      <button class="btn-submit" id="submitbtn" onclick="submitNow()">
-        &#8659; Soumettre mes resultats
+      <button class="btn-submit" id="submitbtn" onclick="submitNow()" style="display:none">
+        &#10003; Terminer ce module
       </button>
     </div>
     <div class="pw"><div class="pt"><div class="pf" id="qp" style="width:0%"></div></div><div class="pl" id="ql">Question 1 / 60</div></div>
@@ -441,7 +441,10 @@ let fL=[],fi=0,qL=[],qi=0,sc=0,answered=false,done=false,sel=-1;
 let history=[]; // [{qi, sel, correct}] — historique des réponses
 
 function bFL(){fL=AF.filter(x=>fA.has(x.t));fi=Math.min(fi,Math.max(0,fL.length-1));flipped=false;}
-function bQL(){qL=AQ.filter(x=>qA.has(x.t));qi=0;sc=0;answered=false;done=false;sel=-1;}
+function bQL(preserve){
+  qL=AQ.filter(x=>qA.has(x.t));
+  if(!preserve){qi=0;sc=0;answered=false;done=false;sel=-1;history=[];viewQi=-1;}
+}
 
 function setMode(m){
   mode=m;
@@ -450,20 +453,72 @@ function setMode(m){
   document.getElementById('pf').className='pane'+(m==='f'?' active':'');
   document.getElementById('pq').className='pane'+(m==='q'?' active':'');
   if(m==='f'){bFL();rFilt('f');rF();}
-  else{bQL();rFilt('q');updateSubmitBar();rQ();}
+  else{
+    // Preserve history/score when switching from flashcards to QCM
+    const preserve = (qi>0 || history.length>0);
+    bQL(preserve);
+    if(preserve){ qL=AQ.filter(x=>qA.has(x.t)); } // rebuild list only
+    rFilt('q');updateSubmitBar();rQ();
+  }
+}
+
+function getThemeStats(t){
+  // Questions answered for this theme
+  const themeQs = AQ.map((q,i)=>({q,i})).filter(x=>x.q.t===t);
+  const answered_qs = themeQs.filter(x=>x.i<qi && history[x.i]!==undefined);
+  if(!answered_qs.length) return null;
+  const correct = answered_qs.filter(x=>history[x.i] && history[x.i].correct).length;
+  const pct = Math.round((correct/answered_qs.length)*100);
+  return {done:answered_qs.length, total:themeQs.length, correct, pct};
 }
 
 function rFilt(p){
   const el=document.getElementById(p+'fr');
   const a=p==='f'?fA:qA;
-  el.innerHTML=TH.map(t=>`<button class="ft${a.has(t)?' on':''}" onclick="tog('${p}','${t}')">${t}</button>`).join('');
+  const isQcm = p==='q';
+
+  // Header explaining the filter
+  const header = isQcm
+    ? '<div style="width:100%;font-size:.72rem;color:var(--ink2);margin-bottom:.4rem">'+
+      '<b>Filtrer par theme</b> — cliquez pour selectionner les themes a evaluer. '+
+      'Les indicateurs montrent votre progression sur chaque theme.</div>'
+    : '<div style="width:100%;font-size:.72rem;color:var(--ink2);margin-bottom:.4rem">'+
+      '<b>Filtrer par theme</b> — cliquez pour selectionner les themes a reviser.</div>';
+
+  const buttons = TH.map(t=>{
+    const on = a.has(t);
+    let badge = '';
+    if(isQcm){
+      const stats = getThemeStats(t);
+      if(stats){
+        const col = stats.pct>=80?'#2D6A4F':stats.pct>=60?'#2A4B8D':'#B03A2E';
+        const bg  = stats.pct>=80?'#E8F5EE':stats.pct>=60?'#EEF2FB':'#FDEEEC';
+        badge = '<span style="margin-left:4px;font-size:.6rem;padding:.1rem .35rem;border-radius:2px;background:'+bg+';color:'+col+';font-weight:600">'+stats.pct+'%</span>';
+      } else if(on) {
+        // Show total questions available
+        const total = AQ.filter(q=>q.t===t).length;
+        badge = '<span style="margin-left:4px;font-size:.6rem;padding:.1rem .35rem;border-radius:2px;background:#EBE8E0;color:#9A9590">'+total+' q</span>';
+      }
+    }
+    const cls = 'ft' + (on ? ' on' : '');
+    return `<button class="${cls}" onclick="tog('${p}','${t}')" title="${t}">${t}${badge}</button>`;
+  }).join('');
+
+  el.innerHTML = header + buttons;
 }
 
 function tog(p,t){
   const a=p==='f'?fA:qA;
   if(a.has(t)){if(a.size>1)a.delete(t);}else a.add(t);
   rFilt(p);
-  if(p==='f'){fi=0;bFL();rF();}else{bQL();rQ();}
+  if(p==='f'){fi=0;bFL();rF();}
+  else{
+    // Rebuild QCM list but preserve progress
+    qL=AQ.filter(x=>qA.has(x.t));
+    if(qi>=qL.length){qi=0;sc=0;answered=false;done=false;sel=-1;history=[];viewQi=-1;}
+    saveProgress();
+    rQ();
+  }
 }
 
 function rF(){
@@ -575,6 +630,7 @@ function ans(i){
   history[qi] = {sel:i, correct:correct};
   updateSubmitBar();
   saveProgress();
+  rFilt('q'); // refresh theme stats
   rQ();
 }
 
@@ -687,7 +743,7 @@ function resumeProgress(){
 
   // 3. Afficher les filtres et passer en mode QCM
   rFilt('f');
-  rFilt('q');
+  rFilt('q'); // will show updated stats
   mode = 'q';
   document.getElementById('tf').className = 'tab';
   document.getElementById('tq').className = 'tab active';
@@ -710,11 +766,44 @@ function updateSubmitBar(){
   if(mode !== 'q' || done){ bar.classList.remove('visible'); return; }
   bar.classList.add('visible');
   document.getElementById('sb-email').textContent = userEmail;
+
   const answered_count = qi + (answered ? 1 : 0);
-  const pct = qL.length ? Math.round((sc / Math.max(answered_count,1))*100) : 0;
+  const pct_correct = answered_count > 0 ? Math.round((sc/answered_count)*100) : 0;
+
+  // Calcul de progression par theme actif
+  const activeThemes = [...qA];
+  let themeLines = activeThemes.map(t => {
+    const themeQs  = AQ.filter(q => q.t === t);
+    const answered_t = themeQs.filter((q,i) => {
+      const globalI = AQ.indexOf(q);
+      return globalI < qi || (globalI === qi && answered);
+    }).length;
+    const correct_t = themeQs.filter((q,i) => {
+      const globalI = AQ.indexOf(q);
+      return history[globalI] && history[globalI].correct;
+    }).length;
+    const pct_t = answered_t > 0 ? Math.round((correct_t/answered_t)*100) : 0;
+    const col = pct_t>=80?'#2D6A4F':pct_t>=60?'#2A4B8D':'#B03A2E';
+    const done_t = answered_t >= themeQs.length;
+    return {t, answered_t, total:themeQs.length, correct_t, pct_t, col, done_t};
+  });
+
+  // Vérifie si au moins un thème est completement fini
+  const anyModuleDone = themeLines.some(tl => tl.done_t);
+
+  // Affichage score global
   document.getElementById('sb-score').textContent =
     answered_count + ' / ' + qL.length + ' questions — ' + sc + ' correcte(s)' +
-    (answered_count > 0 ? ' (' + Math.round((sc/answered_count)*100) + '%)' : '');
+    (answered_count > 0 ? ' (' + pct_correct + '%)' : '');
+
+  // Afficher/cacher le bouton selon si un module est fini
+  const btn = document.getElementById('submitbtn');
+  if(btn){
+    btn.style.display = anyModuleDone ? 'flex' : 'none';
+    // Trouver les modules terminés pour le label
+    const doneThemes = themeLines.filter(tl=>tl.done_t).map(tl=>tl.t);
+    btn.title = doneThemes.length > 0 ? 'Modules termines : ' + doneThemes.join(', ') : '';
+  }
 }
 
 function rScore(){
@@ -723,7 +812,7 @@ function rScore(){
   const pct_total = Math.round((sc/qL.length)*100);
   const msg = pct_total>=80?"Excellente maitrise.":pct_total>=60?"Bon socle — quelques points a consolider.":"Des notions cles a retravailler sur les flashcards.";
   const col = pct_total>=80?"#2D6A4F":pct_total>=60?"#2A4B8D":"#B03A2E";
-  const themesActifs = [...qA].join(', ');
+  const themesActifs = getAnsweredThemes();
   const now = new Date().toLocaleString('fr-FR');
   clearProgress();
   document.getElementById('submitbar').classList.remove('visible');
@@ -739,7 +828,7 @@ function rScore(){
   document.getElementById('qnav').style.display='none';
   document.getElementById('qp').style.width='100%';
   document.getElementById('ql').textContent='Termine';
-  sendToSheets(userEmail, sc, qL.length, pct_total, msg, themesActifs, now, 'complet');
+  sendToSheets(userEmail, sc, qL.length, pct_total, msg, themesTraites, now, 'complet');
 }
 
 function showToast(msg, duration){
@@ -749,6 +838,15 @@ function showToast(msg, duration){
   setTimeout(()=>t.classList.remove('show'), duration||2800);
 }
 
+function getAnsweredThemes(){
+  // Retourne uniquement les themes dont au moins une question a ete repondue
+  const answered_themes = new Set();
+  AQ.forEach((q, i) => {
+    if(history[i] !== undefined) answered_themes.add(q.t);
+  });
+  return [...answered_themes].join(', ');
+}
+
 async function submitNow(){
   const btn = document.getElementById('submitbtn');
   btn.disabled = true;
@@ -756,10 +854,10 @@ async function submitNow(){
   try {
   const answered_count = qi + (answered ? 1 : 0);
   const pct = answered_count > 0 ? Math.round((sc/answered_count)*100) : 0;
-  const themesActifs = [...qA].join(', ');
+  const themesTraites = getAnsweredThemes();
   const now = new Date().toLocaleString('fr-FR');
   const ok = await sendToSheets(userEmail, sc, answered_count, pct,
-    'Soumission partielle ('+answered_count+'/'+qL.length+')', themesActifs, now, 'partiel');
+    'Module termine ('+answered_count+'/'+qL.length+')', themesTraites, now, 'partiel');
   if(ok){
     showToast('Resultats enregistres dans Google Sheets');
   }
