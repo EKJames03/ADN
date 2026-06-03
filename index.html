@@ -602,12 +602,12 @@ async function submitNow(){
 }
 
 // ── Remplacer cette URL par l'URL de deploiement Google Apps Script ──
-const GAS_URL = "COLLER_ICI_URL_APPS_SCRIPT";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwPUAbj8ICdZf2WyPhInvudc8CW-svq3_bUNGlHKDjGg3B9MYdZC3vRO68YGkLUNk-r/exec";
 
 async function sendToSheets(email, score, total, pct, appreciation, themes, date, type){
   const statusEl = document.getElementById('sendst');
 
-  if(!GAS_URL || GAS_URL === "COLLER_ICI_URL_APPS_SCRIPT"){
+  if(!GAS_URL || GAS_URL === "https://script.google.com/macros/s/AKfycbwPUAbj8ICdZf2WyPhInvudc8CW-svq3_bUNGlHKDjGg3B9MYdZC3vRO68YGkLUNk-r/exec"){
     if(statusEl) statusEl.textContent = "URL Apps Script non configuree.";
     return false;
   }
@@ -617,7 +617,9 @@ async function sendToSheets(email, score, total, pct, appreciation, themes, date
   const url = GAS_URL + "?" + params.toString();
 
   return new Promise((resolve) => {
-    const img = new Image();
+  
+    console.log("Envoi vers :", url);
+	const img = new Image();
     img.onload = img.onerror = () => {
       if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
       resolve(true);
