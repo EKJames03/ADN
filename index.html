@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiches de debat — Conflit israelo-palestinien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F7F4EE;--sur:#FFF;--ink:#1A1714;--ink2:#5A5650;--ink3:#9A9590;--acc:#2A4B8D;--bdr:#E2DDD6;--tbg:#EBE8E0;--gbg:#E8F5EE;--gbd:#2D6A4F;--gtx:#1B4332;--rbg:#FDEEEC;--rbd:#B03A2E;--rtx:#7B241C}
+html{font-size:16px}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;line-height:1.6}
+header{padding:2.5rem 2rem 1.5rem;max-width:800px;margin:0 auto;border-bottom:1px solid var(--bdr)}
+header h1{font-family:'Libre Baskerville',serif;font-size:clamp(1.4rem,3vw,2.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:.3rem}
+header h1 em{font-style:italic;color:var(--acc)}
+header p{font-size:.82rem;color:var(--ink2)}
+.tabs{display:flex;max-width:800px;margin:0 auto;border-bottom:1px solid var(--bdr);background:var(--sur);position:sticky;top:0;z-index:10}
+.tab{flex:1;padding:.85rem;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;letter-spacing:.05em;text-transform:uppercase}
+.tab:hover{color:var(--ink)}.tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+main{max-width:800px;margin:0 auto;padding:1.5rem}
+.pw{margin-bottom:1.25rem}.pt{height:3px;background:var(--bdr);border-radius:2px}.pf{height:100%;background:var(--acc);border-radius:2px;transition:width .4s}.pl{font-size:.7rem;color:var(--ink3);margin-top:.3rem;text-align:right}
+.fscene{perspective:1200px}
+.cw{position:relative;width:100%;min-height:280px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;margin-bottom:.9rem}
+.cw.flip{transform:rotateY(180deg)}
+.cf{position:absolute;inset:0;background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:1.6rem;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+.cbk{transform:rotateY(180deg);background:#F2EFE8}
+.ctag{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);background:var(--tbg);padding:.2rem .65rem;border-radius:3px;margin-bottom:.9rem;align-self:flex-start}
+.cq{font-family:'Libre Baskerville',serif;font-size:1rem;line-height:1.65;color:var(--ink);margin-bottom:.6rem}
+.ch{font-size:.72rem;color:var(--ink3);margin-top:.4rem}
+.ca{font-size:.88rem;line-height:1.75;color:var(--ink)}
+.cs{font-size:.7rem;color:var(--ink3);margin-top:.9rem;padding-top:.65rem;border-top:1px solid var(--bdr);font-style:italic}
+.fcue{text-align:center;font-size:.72rem;color:var(--ink3);margin-bottom:.8rem}
+.fcue span{display:inline-block;border:1px dashed var(--bdr);padding:.15rem .6rem;border-radius:3px}
+.nr{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.btn{padding:.5rem 1.2rem;border:1px solid var(--bdr);border-radius:4px;background:var(--sur);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--tbg);border-color:var(--ink3)}.btn:disabled{opacity:.28;cursor:default}
+.bta{background:var(--acc);color:#fff;border-color:var(--acc)}.bta:hover{background:#1e3b70;border-color:#1e3b70}
+.bta:disabled{background:var(--bdr);border-color:var(--bdr);color:var(--ink3)}
+.btn-submit{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.1rem;border:1px solid #2D6A4F;border-radius:4px;background:#E8F5EE;color:#1B4332;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s;white-space:nowrap}
+.btn-submit:hover{background:#C8EAD8;border-color:#2D6A4F}
+.btn-submit:disabled{opacity:.35;cursor:default}
+.submit-bar{display:none;align-items:center;justify-content:space-between;gap:.75rem;padding:.75rem 1rem;background:var(--sur);border:1px solid var(--bdr);border-radius:8px;margin-bottom:1rem;flex-wrap:wrap}
+.submit-bar.visible{display:flex}
+.submit-info{font-size:.78rem;color:var(--ink2);line-height:1.4}
+.submit-info b{color:var(--ink);font-weight:500}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.82rem;padding:.6rem 1.25rem;border-radius:5px;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.cnt{font-size:.8rem;color:var(--ink2)}
+.qcard{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:1.5rem;margin-bottom:1rem}
+.qn{font-size:.68rem;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.45rem}
+.qq{font-family:'Libre Baskerville',serif;font-size:.98rem;line-height:1.65;color:var(--ink);margin-bottom:1rem}
+.opt{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem .85rem;border:1px solid var(--bdr);border-radius:5px;margin-bottom:.4rem;cursor:pointer;font-size:.86rem;line-height:1.5;color:var(--ink);transition:background .12s,border-color .12s;user-select:none}
+.opt:hover:not(.lk){background:var(--tbg);border-color:var(--ink3)}
+.opt.ok{background:var(--gbg);border-color:var(--gbd);color:var(--gtx)}
+.opt.ko{background:var(--rbg);border-color:var(--rbd);color:var(--rtx)}
+.opt.dm{opacity:.38}.opt.lk{cursor:default}
+.ol{min-width:20px;height:20px;border-radius:50%;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:500;color:var(--acc);background:var(--tbg);flex-shrink:0;margin-top:1px}
+.opt.ok .ol{background:var(--gbd);border-color:var(--gbd);color:#fff}
+.opt.ko .ol{background:var(--rbd);border-color:var(--rbd);color:#fff}
+.ex{display:none;margin-top:.85rem;padding:.85rem;background:var(--tbg);border-radius:5px;font-size:.8rem;line-height:1.72;color:var(--ink2)}
+.ex.show{display:block}
+.sb{text-align:center;background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:2.5rem 2rem;margin-bottom:1.25rem}
+.sbig{font-family:'Libre Baskerville',serif;font-size:3.2rem;font-weight:700;color:var(--acc);line-height:1;margin-bottom:.4rem}
+.ssub{font-size:.86rem;color:var(--ink2);margin-bottom:1.2rem}
+.sbw{max-width:240px;margin:0 auto 1.2rem}.sbt{height:6px;background:var(--bdr);border-radius:3px}.sbf{height:100%;border-radius:3px;transition:width 1s ease}
+.fr{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.1rem}
+.ft{font-size:.65rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .6rem;border-radius:3px;border:1px solid var(--bdr);background:var(--sur);color:var(--ink2);cursor:pointer;transition:all .15s}
+.ft:hover{border-color:var(--acc);color:var(--acc)}.ft.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.pane{display:none}.pane.active{display:block}
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.onboard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:2.5rem 2rem;max-width:440px;width:100%;text-align:center}
+.onboard h2{font-family:'Libre Baskerville',serif;font-size:1.35rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.onboard p{font-size:.85rem;color:var(--ink2);margin-bottom:1.5rem;line-height:1.6}
+.onboard .badge{display:inline-block;font-size:.68rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);background:var(--tbg);padding:.2rem .7rem;border-radius:3px;margin-bottom:1rem}
+.einput{width:100%;padding:.65rem .85rem;border:1px solid var(--bdr);border-radius:5px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:var(--sur);outline:none;transition:border-color .15s;margin-bottom:.75rem}
+.einput:focus{border-color:var(--acc)}
+.einput.err{border-color:var(--rbd);background:var(--rbg)}
+.errmsg{font-size:.78rem;color:var(--rbd);margin-bottom:.75rem;display:none}
+.errmsg.show{display:block}
+.overlay.hidden{display:none}
+.send-status{font-size:.78rem;color:var(--ink3);margin-top:.6rem;min-height:1rem}
+@media(max-width:520px){header{padding:1.5rem 1rem 1.1rem}main{padding:1rem .85rem}.cf{padding:1.2rem}.qcard{padding:1.1rem}.onboard{padding:1.75rem 1.25rem}}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay">
+  <div class="onboard">
+    <div class="badge">Seance 2 — Quiz de revision</div>
+    <h2>Fiches de debat<br>Conflit israelo-palestinien</h2>
+    <p>60 questions QCM &middot; 36 flashcards<br>Entrez votre email pour demarrer.<br>Vos resultats seront enregistres a la fin du quiz.</p>
+    <input class="einput" type="email" id="emailinput" placeholder="prenom.nom@example.com" autocomplete="email">
+    <div class="errmsg" id="errmsg">Veuillez entrer une adresse email valide.</div>
+    <button class="btn bta" style="width:100%;padding:.7rem" onclick="startQuiz()">Commencer &#8594;</button>
+  </div>
+</div>
+<header>
+  <h1>Fiches de debat<br><em>Conflit israelo-palestinien</em></h1>
+  <p>36 flashcards &middot; 60 questions QCM &middot; 12 themes &middot; Droit, histoire, rhetorique</p>
+</header>
+<div class="tabs">
+  <button class="tab active" onclick="setMode('f')" id="tf">Flashcards</button>
+  <button class="tab" onclick="setMode('q')" id="tq">QCM</button>
+</div>
+<main>
+  <div id="pf" class="pane active">
+    <div class="fr" id="ffr"></div>
+    <div class="pw"><div class="pt"><div class="pf" id="fp" style="width:0%"></div></div><div class="pl" id="fl">Carte 1 / 36</div></div>
+    <div class="fscene">
+      <div class="cw" id="cw" onclick="doFlip()">
+        <div class="cf" id="cfront"></div>
+        <div class="cf cbk" id="cback"></div>
+      </div>
+    </div>
+    <div class="fcue"><span>Cliquer sur la carte pour reveler la reponse</span></div>
+    <div class="nr">
+      <button class="btn" id="fpv" onclick="mf(-1)">&#8592; Precedente</button>
+      <span class="cnt" id="fc2">1 / 36</span>
+      <button class="btn bta" id="fnx" onclick="mf(1)">Suivante &#8594;</button>
+    </div>
+  </div>
+  <div id="pq" class="pane">
+    <div class="fr" id="qfr"></div>
+    <div class="submit-bar" id="submitbar">
+      <div class="submit-info">
+        <b id="sb-email"></b><br>
+        <span id="sb-score">0 reponse(s) enregistree(s)</span>
+      </div>
+      <button class="btn-submit" id="submitbtn" onclick="submitNow()">
+        &#8659; Soumettre mes resultats
+      </button>
+    </div>
+    <div class="pw"><div class="pt"><div class="pf" id="qp" style="width:0%"></div></div><div class="pl" id="ql">Question 1 / 60</div></div>
+    <div id="qa"></div>
+    <div class="nr" id="qnav" style="display:none">
+      <span class="cnt" id="qs">Score : 0 / 0</span>
+      <button class="btn bta" id="qnx" onclick="nextQ()">Question suivante &#8594;</button>
+    </div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const TH=["ONU/ONG/CIJ","Apartheid","Genocide","7 octobre","Antisionisme","Colonisation","Disproportion","Blocus/famine","Flottille","Sionisme","Medias/images","Juifs critiques"];
+
+const AF=[
+{t:"ONU/ONG/CIJ",q:"Quelle distinction faut-il faire entre une resolution de l'Assemblee generale de l'ONU et un arret de la CIJ ?",a:"Une resolution AG est un <b>vote politique entre Etats</b>, non contraignant juridiquement. Un arret CIJ resulte d'une <b>procedure contradictoire</b> avec preuves et plaidoiries. Confondre les deux est une erreur de droit fondamentale.",src:"Fiche 1 — ONU/ONG/CIJ"},
+{t:"ONU/ONG/CIJ",q:"Pourquoi le Conseil de securite est-il bloque sur le conflit israelo-palestinien ?",a:"Les cinq membres permanents disposent du <b>droit de veto</b>. Les Etats-Unis l'ont utilise pour bloquer des resolutions condamnant Israel. Cela illustre que l'ONU est traversee par des <b>alliances strategiques</b>, pas uniquement par le droit.",src:"Fiche 1 — ONU/ONG/CIJ"},
+{t:"ONU/ONG/CIJ",q:"Comment evaluer correctement un rapport d'ONG internationale sur Israel ?",a:"Demander : quelle <b>methode</b> ? quelles <b>sources</b> ? quel contradictoire ? quel <b>perimetre</b> ? Une ONG peut documenter des faits reels tout en ayant un angle editorial et des limites methodologiques. Ne pas accepter ni rejeter en bloc selon le prestige.",src:"Fiche 1 — ONU/ONG/CIJ"},
+{t:"Apartheid",q:"Quelle est la definition juridique de l'apartheid selon le Statut de Rome (art. 7) ?",a:"Actes inhumains commis dans le cadre d'un <b>regime institutionnalise de domination et d'oppression systematiques fonde sur la race</b>, avec intention de maintenir ce regime. Le critere decisif est la <b>systematicite institutionnelle</b>.",src:"Fiche 2 — Apartheid"},
+{t:"Apartheid",q:"Quelle est la difference juridique entre citoyens arabes israeliens et Palestiniens de Cisjordanie ?",a:"Citoyens arabes israeliens (~21%) : <b>citoyennete israelienne</b>, vote, Knesset, universites. Palestiniens de Cisjordanie : sous <b>autorite militaire israelienne sans citoyennete</b> — droit d'occupation belligerante. Deux statuts radicalement distincts.",src:"Fiche 2 — Apartheid"},
+{t:"Apartheid",q:"Quels elements sont avances pour qualifier la Cisjordanie d'apartheid, et quelles nuances apporter ?",a:"Arguments : <b>colonies, routes separees, checkpoints, permis de circulation differencies</b>. Nuances : mesures presentees comme securitaires nees des attentats ; visent des statuts juridiques plutot que des races. Le debat porte sur la <b>qualification</b> — discrimination, occupation ou apartheid racial institutionnalise.",src:"Fiche 2 — Apartheid"},
+{t:"Genocide",q:"Quels sont les deux elements cumulatifs du genocide selon la Convention de 1948 ?",a:"<b>1) Actus reus</b> : meurtre, atteinte grave, conditions de destruction physique, mesures entravant les naissances, transfert force d'enfants. <b>2) Dolus specialis</b> : intention specifique de detruire le groupe national, ethnique, racial ou religieux <i>comme tel</i>. Sans dolus specialis prouve, pas de genocide.",src:"Fiche 3 — Genocide"},
+{t:"Genocide",q:"Qu'est-ce que le dolus specialis et pourquoi est-il si difficile a etablir ?",a:"C'est l'<b>intention specifique et prealable de detruire un groupe comme tel</b>. D'apres la jurisprudence du <b>TPIY</b> et de la <b>CIJ</b> (Bosnie c. Serbie, 2007), des destructions massives ou declarations sont des indices, pas des preuves suffisantes seules.",src:"Fiche 3 — Genocide"},
+{t:"Genocide",q:"Comment distinguer souffrance civile, crime de guerre, crime contre l'humanite et genocide ?",a:"<b>4 niveaux</b> : (1) souffrance civile reelle et tragique ; (2) crime de guerre : ciblage illegal, disproportionnalite ; (3) crime contre l'humanite : attaque systematique contre civils ; (4) genocide : intention specifique de detruire un groupe. La compassion ne doit pas court-circuiter la precision juridique.",src:"Fiche 3 — Genocide"},
+{t:"7 octobre",q:"Que dit le DIH sur le ciblage de civils dans tout conflit arme, y compris de resistance ?",a:"Les <b>Protocoles additionnels (1977)</b> aux Conventions de Geneve interdisent <b>absolument</b> de cibler des civils, de prendre des otages, de commettre des violences sexuelles. Pas d'exception pour les conflits asymetriques ou les luttes de resistance.",src:"Fiche 4 — 7 octobre"},
+{t:"7 octobre",q:"Quelle distinction faut-il faire entre 'expliquer le contexte' et 'justifier une action' ?",a:"<b>Expliquer</b> : comprendre les causes sans innocenter. <b>Justifier</b> : affirmer que le contexte rend l'acte legal ou moral. En droit, les circonstances attenuantes peuvent reduire la peine, mais n'effacent ni la qualification ni la responsabilite.",src:"Fiche 4 — 7 octobre"},
+{t:"7 octobre",q:"Comment repondre a 'condamner le Hamas revient a soutenir le gouvernement israelien' ?",a:"C'est un <b>faux dilemme</b> : on peut condamner les massacres du 7 octobre <b>et</b> critiquer la politique militaire israelienne a Gaza. La <b>competition victimaire</b> est un piege rhetorique qui empeche toute analyse morale coherente.",src:"Fiche 4 — 7 octobre"},
+{t:"Antisionisme",q:"Quelle est la definition de travail de l'antisemitisme selon l'IHRA (2016) ?",a:"'Une certaine perception des Juifs qui peut s'exprimer par une haine a leur egard.' Exemples : nier le droit a l'autodetermination des Juifs, comparer la politique israelienne aux actions nazies, <b>tenir les Juifs collectivement responsables des actions d'Israel</b>.",src:"Fiche 5 — Antisionisme"},
+{t:"Antisionisme",q:"Quels six marqueurs font basculer une critique d'Israel vers l'antisemitisme ?",a:"(1) <b>Double standard</b> ; (2) <b>diabolisation</b> (assimilation aux nazis) ; (3) <b>delegitimation</b> (nier le droit d'existence) ; (4) <b>nazification</b> des symboles ; (5) <b>responsabilisation collective</b> des Juifs de la diaspora ; (6) substitution de 'sioniste' a 'Juif'.",src:"Fiche 5 — Antisionisme"},
+{t:"Antisionisme",q:"Comment repondre a 'l'antisemitisme est un joker pour interdire toute critique d'Israel' ?",a:"Reconnaitre que la <b>critique d'une politique israelienne est legitime</b>. La frontiere n'est pas entre critiquer et defendre Israel, mais entre <b>critique precise (legitime)</b> et delegitimation, diabolisation ou double standard. La force vient de la frontiere argumentee.",src:"Fiche 5 — Antisionisme"},
+{t:"Colonisation",q:"Comment definir le colonialisme en droit international, et pourquoi ce cadre s'applique-t-il ou non a Israel ?",a:"Colonisation : <b>controle d'un territoire etranger par une puissance exterieure pour l'exploiter</b>. Le peuple juif possede un <b>lien historique, culturel, religieux, linguistique et archeologique</b> avec la region. Le mot Juif vient de Judee. Ce n'est pas une invention moderne.",src:"Fiche 6 — Colonisation"},
+{t:"Colonisation",q:"Qu'est-ce que la Nakba et quelle est son importance dans le recit palestinien ?",a:"Evenements de <b>1947-1949</b> : deplacement de 700 000 a 750 000 Palestiniens, destruction de centaines de villages, naissance de la question des refugies. <b>Fondement de l'identite nationale palestinienne</b> et du droit au retour revendique.",src:"Fiche 6 — Colonisation"},
+{t:"Colonisation",q:"En quoi la presence des Juifs mizrahim nuance-t-elle le recit 'Israel = colons europeens' ?",a:"Les Juifs <b>mizrahim</b> (Moyen-Orient, Afrique du Nord) et sefardades constituent ~50% de la population juive israelienne. Beaucoup ont fui des pays arabes (Irak, Maroc, Yemen, Egypte) apres 1948. Reduire Israel a une implantation europeenne efface cette realite.",src:"Fiche 6 — Colonisation"},
+{t:"Disproportion",q:"Comment le Protocole additionnel I (1977) definit-il la proportionnalite d'une attaque ?",a:"Interdiction des attaques dont les dommages civils seraient <b>excessifs par rapport a l'avantage militaire attendu</b>. S'evalue <b>operation par operation</b> — pas par un ratio global de morts entre deux camps.",src:"Fiche 7 — Disproportion"},
+{t:"Disproportion",q:"Que dit le DIH sur les combattants utilisant des zones civiles denses comme base operationnelle ?",a:"L'<b>art. 51.7 Protocole I</b> interdit d'utiliser la presence civile comme bouclier. Mais cette violation n'<b>exonere pas</b> l'adversaire de ses obligations de precaution et de proportionnalite. Les deux obligations sont cumulatives.",src:"Fiche 7 — Disproportion"},
+{t:"Disproportion",q:"Comment distinguer disproportion morale ressentie et violation juridique de la proportionnalite ?",a:"<b>Disproportion morale</b> : reaction emotionnelle legitime face a l'asymetrie des pertes. <b>Violation juridique</b> : necessite de prouver frappe par frappe que l'avantage militaire attendu etait negligeable par rapport aux dommages civils previsibles. Un ecart de 1 a 30 peut resulter de la guerre urbaine.",src:"Fiche 7 — Disproportion"},
+{t:"Blocus/famine",q:"Que dit l'art. 8 du Statut de Rome sur la famine comme methode de guerre ?",a:"C'est un <b>crime de guerre</b> si etabli le <b>caractere delibere</b> d'affamer les civils. Deux elements : (1) privation de biens indispensables a la survie ; (2) intention deliberee, distincte des effets catastrophiques d'un blocus securitaire.",src:"Fiche 8 — Blocus/famine"},
+{t:"Blocus/famine",q:"Quelles conditions rendent un blocus naval legal selon le Manuel de San Remo (1994) ?",a:"<b>Notification formelle</b> aux Etats neutres, non-discrimination, et interdiction si le <b>seul but est d'affamer les civils</b>. Le CICR et des experts de l'ONU ont emis des reserves sur la conformite du blocus de Gaza a ces conditions.",src:"Fiche 8 — Blocus/famine"},
+{t:"Blocus/famine",q:"Comment integrer le detournement de l'aide humanitaire par le Hamas dans le debat sur les responsabilites ?",a:"OCHA, Reuters et AP ont documente des detournements. L'ONU a suspendu des convois pour cause de pillages. Ce phenomene ne supprime pas les obligations d'Israel, mais <b>complexifie la chaine de responsabilite</b> : Israel, Hamas et communaute internationale ont des responsabilites distinctes.",src:"Fiche 8 — Blocus/famine"},
+{t:"Flottille",q:"Quelle distinction entre aide humanitaire legitime et operation politique de confrontation ?",a:"L'aide est legitime quand elle vise <b>effectivement les civils</b> et passe par des canaux permettant la verification. Une flottille qui refuse les inspections peut etre une <b>operation de communication politique</b>. La legitimite de l'objectif ne rend pas legitimes tous les modes d'acheminement.",src:"Fiche 9 — Flottille"},
+{t:"Flottille",q:"Quel argument juridique Israel invoque-t-il pour intercepter les navires vers Gaza ?",a:"Le <b>droit des blocus</b> (Manuel de San Remo) : prevenir l'entree d'armes et de materiel a double usage. Le rapport Palmer (ONU, 2011) a juge le blocus <b>legal</b> mais l'intervention militaire lors du Mavi Marmara <b>excessive</b>.",src:"Fiche 9 — Flottille"},
+{t:"Flottille",q:"Comment repondre a 'si Israel n'a rien a cacher, pourquoi bloquer la flottille ?' ?",a:"Reconnaitre que l'<b>aide aux civils est urgente et necessaire</b>. Poser la question symetrique : si la cargaison est strictement humanitaire, <b>pourquoi refuser une inspection</b> ? L'enjeu n'est pas de bloquer l'aide mais de securiser son acheminement reel.",src:"Fiche 9 — Flottille"},
+{t:"Sionisme",q:"Quelle est l'origine historique du sionisme et pourquoi ne peut-il pas etre reduit a une ideologie raciste ?",a:"Nait au <b>XIXe siecle</b> dans le contexte de l'antisemitisme europeen (pogroms, affaire Dreyfus). Herzl publie <i>L'Etat des Juifs</i> en 1896. Courants <b>laïc, socialiste, culturel, religieux</b>. Mouvement d'<b>autodetermination nationale</b> en reponse a des persecutions — pas une theorie de superiorite raciale.",src:"Fiche 10 — Sionisme"},
+{t:"Sionisme",q:"Comment distinguer un Etat-nation avec identite majoritaire d'un Etat raciste ?",a:"De nombreux Etats ont une <b>langue, culture ou identite nationale majoritaire constitutive</b> (France, Japon, Grece) sans etre qualifies d'Etats racistes. Le test democratique est l'<b>egalite des droits civiques de tous les citoyens</b>.",src:"Fiche 10 — Sionisme"},
+{t:"Sionisme",q:"Quelle etait la resolution 3379 (1975) et pourquoi a-t-elle ete annulee en 1991 ?",a:"Resolution 3379 : 'le sionisme est une forme de racisme'. Annulee par la <b>resolution 46/86 (1991)</b> a 111 voix pour, 25 contre. Illustre que les votes onusiens refletent des <b>rapports de forces changeants</b>, pas des verites juridiques permanentes.",src:"Fiche 10 — Sionisme"},
+{t:"Medias/images",q:"Quelles sont les 5 etapes de verification d'une image ou video en temps de conflit (OSINT) ?",a:"(1) <b>Source originale</b> ; (2) <b>metadonnees EXIF</b> ; (3) <b>geolocalisation</b> (Google Earth, Sentinel Hub) ; (4) <b>recoupement</b> sources independantes ; (5) <b>datation precise</b>. Refs : <b>Bellingcat, BBC Verify, AFP Factuel, Reuters Fact Check</b>.",src:"Fiche 11 — Medias/images"},
+{t:"Medias/images",q:"Pourquoi une image authentique peut-elle induire en erreur sur la responsabilite d'un evenement ?",a:"Elle peut etre utilisee avec une <b>legende fausse</b> : mauvaise date, mauvais lieu, mauvais auteur. Elle montre un <b>resultat visible</b>, pas l'auteur, l'intention, la cible ou le contexte tactique. Image authentique ne vaut pas qualification juridique.",src:"Fiche 11 — Medias/images"},
+{t:"Medias/images",q:"Comment repondre a 'tu vas fact-checker un enfant mort ?' sans paraître cynique ?",a:"Demander une verification <b>n'est pas nier la souffrance</b>. Fonder une condamnation sur une image fausse fragilise toutes les condamnations fondees sur des images vraies. <b>L'emotion alerte, la verification protege la verite.</b>",src:"Fiche 11 — Medias/images"},
+{t:"Juifs critiques",q:"Qu'est-ce qu'un argument ad auctoritatem et pourquoi 'meme des Juifs critiquent Israel' en est-il une forme ?",a:"L'<i>ad auctoritatem</i> substitue <b>l'identite de l'orateur</b> a la solidite des preuves. Un argument se juge sur ses <b>faits, methode et criteres</b> — pas sur qui le prononce. Le pluralisme juif est reel, il ne valide pas automatiquement toute these antisioniste.",src:"Fiche 12 — Juifs critiques"},
+{t:"Juifs critiques",q:"Comment distinguer critique juive legitime d'Israel et instrumentalisation d'une voix minoritaire ?",a:"L'instrumentalisation survient quand la voix juive est utilisee comme <b>caution morale absolue</b> pour valider un narratif radical, en opposant 'bons Juifs critiques' aux 'mauvais Juifs communautaires'. Revenir systematiquement aux <b>faits et aux criteres</b>.",src:"Fiche 12 — Juifs critiques"},
+{t:"Juifs critiques",q:"Pourquoi les descendants de survivants de la Shoah critiquant Israel ne tranchent-ils pas automatiquement le debat ?",a:"L'experience memorielle confere une <b>legitimite morale a temoigner</b>, mais ne garantit pas l'exactitude factuelle ou la rigueur juridique. Les descendants de survivants sont profondement <b>divises</b> sur Israel. Invoquer leur autorite pour clore un debat factuel substitue l'emotion au raisonnement.",src:"Fiche 12 — Juifs critiques"},
+];
+
+const AQ=[
+// --- FICHE 1 : ONU/ONG/CIJ (5 questions) ---
+{t:"ONU/ONG/CIJ",q:"Une resolution de l'Assemblee generale de l'ONU condamnant Israel est :",
+opts:["Un jugement juridiquement contraignant pour tous les Etats membres","Un vote politique refletant un rapport de forces diplomatiques, non contraignant","Une decision equivalente a un arret de la CIJ","Une preuve juridiquement suffisante devant tout tribunal international"],
+ans:1,ex:"<b>Les resolutions de l'AG ne sont pas contraignantes.</b> Elles expriment une position politique influencee par des coalitions et des interets diplomatiques. Un arret de la CIJ resulte d'une procedure contradictoire avec examen de preuves — niveau de normativite radicalement different."},
+
+{t:"ONU/ONG/CIJ",q:"Israel est le pays le plus condamne par l'Assemblee generale. Quelle conclusion juridique en tirer ?",
+opts:["Qu'Israel est necessairement coupable au regard du droit international","Que la quantite de condamnations ne remplace pas la qualite des preuves judiciaires","Que le droit international condamne officiellement Israel","Qu'Israel a viole chaque resolution adoptee contre lui"],
+ans:1,ex:"<b>Quantite de condamnations ne remplace pas qualite des preuves.</b> L'AG vote selon des rapports de forces politiques. Israel fait l'objet d'une attention structurellement disproportionnee par rapport a d'autres crises (Rwanda, Syrie, Yemen ont recueilli moins de resolutions combinees sur plusieurs annees). Cela ne signifie pas que les faits sont faux, mais que le vote seul ne prouve rien juridiquement."},
+
+{t:"ONU/ONG/CIJ",q:"Le Conseil de securite de l'ONU est bloque sur le conflit israelo-palestinien principalement parce que :",
+opts:["La majorite des membres soutient Israel","Les Etats-Unis ont utilise leur droit de veto pour bloquer des resolutions","L'ONU n'a pas competence pour ce conflit","Le droit international interdit d'intervenir dans un conflit bilateral"],
+ans:1,ex:"<b>Les Etats-Unis ont utilise leur droit de veto a plusieurs reprises</b> pour bloquer des resolutions condamnant Israel ou appelant a un cessez-le-feu. Cela illustre que le CS est traverse par des alliances strategiques. Chaque membre permanent peut seul paralyser le Conseil — ce qui reflete un rapport de forces, pas necessairement un jugement de droit."},
+
+{t:"ONU/ONG/CIJ",q:"Quelle est la bonne methode pour evaluer un rapport d'Amnesty International ou de Human Rights Watch sur le conflit ?",
+opts:["L'accepter integralement car ces organisations sont reconnues mondialement","Le rejeter car ces ONG sont financees par des gouvernements hostiles a Israel","Examiner la methode, les sources, le contradictoire et le perimetre du rapport","S'en remettre uniquement aux positions gouvernementales israeliennes"],
+ans:2,ex:"<b>L'evaluation doit porter sur la methode, pas sur le prestige ou les financeurs.</b> Une ONG peut documenter des faits reels tout en ayant un angle editorial, une selection et des limites methodologiques. Questions a poser : quelles sources primaires ? y a-t-il eu acces aux deux parties ? quelle est la date et le perimetre geographique ? Ces questions s'appliquent a tous les rapports."},
+
+{t:"ONU/ONG/CIJ",q:"Qu'est-ce qu'une ordonnance en indication de mesures conservatoires de la CIJ, et quelle est sa valeur juridique ?",
+opts:["C'est un jugement definitif condamnant un Etat pour genocide","C'est une injonction d'urgence a caractere contraignant mais qui ne prejuge pas du fond de l'affaire","C'est une recommandation non contraignante, comme une resolution de l'AG","C'est le meme niveau juridique qu'un rapport d'enquete d'une commission de l'ONU"],
+ans:1,ex:"<b>Une ordonnance en mesures conservatoires est juridiquement contraignante</b> (art. 41 du Statut de la CIJ, arret LaGrand 2001) mais elle <b>ne prejuge pas du fond</b> : elle ordonne des mesures d'urgence pour eviter un prejudice irreparable pendant la duree de la procedure, qui peut durer des annees. La CIJ a rendu une telle ordonnance dans l'affaire Afrique du Sud c. Israel en janvier 2024."},
+
+// --- FICHE 2 : APARTHEID (5 questions) ---
+{t:"Apartheid",q:"Selon la Convention internationale de 1973 et le Statut de Rome, l'apartheid est :",
+opts:["Toute forme de discrimination raciale dans un Etat","Des actes inhumains commis dans le cadre d'un regime institutionnalise de domination systematique fonde sur la race","Un systeme de segregation geographique des populations","L'interdiction faite a une minorite de voter ou d'acceder a l'education"],
+ans:1,ex:"<b>La definition juridique exige un regime institutionnalise de domination systematique</b> — pas n'importe quelle discrimination. C'est l'element 'institutionnalise et systematique' qui distingue l'apartheid d'une discrimination ou d'une occupation. Cette precision est centrale pour evaluer si la situation en Cisjordanie ou en Israel souverain correspond a cette definition."},
+
+{t:"Apartheid",q:"Parmi ces affirmations, laquelle est exacte concernant les citoyens arabes israeliens ?",
+opts:["Ils n'ont pas le droit de vote pour les elections a la Knesset","Ils sont soumis a la loi militaire comme en Cisjordanie","Ils ont la citoyennete israelienne, le droit de vote et sont representes a la Knesset","Ils ne peuvent pas exercer de professions liberales en Israel"],
+ans:2,ex:"<b>Les citoyens arabes israeliens (~21% de la population) disposent de la pleine citoyennete</b> : vote, representation parlementaire, acces aux soins et a l'education. En 2021, la liste islamiste Ra'am a participe au gouvernement israelien. Leur situation est juridiquement differente de celle des Palestiniens de Cisjordanie — distinction centrale dans le debat sur l'apartheid."},
+
+{t:"Apartheid",q:"Pourquoi la barriere de separation en Cisjordanie fait-elle l'objet d'un double debat juridique ?",
+opts:["Parce qu'elle est construite en beton alors que le droit international exige des barrieres metalliques","Parce qu'Israel la justifie comme mesure securitaire mais la CIJ a rendu un avis sur la legalite de son trace en 2004","Parce qu'elle empiete sur le territoire egipten","Parce que son financement par les Etats-Unis est contraire au droit international"],
+ans:1,ex:"<b>Israel justifie la barriere comme mesure securitaire</b> construite apres la vague d'attentats-suicides de la deuxieme Intifada (2000-2005). La <b>CIJ a rendu un avis consultatif en 2004</b> jugeant que le trace dans les territoires occupes violait le droit international. Un avis consultatif n'est pas un arret contraignant. Les deux lectures coexistent dans le debat."},
+
+{t:"Apartheid",q:"Qu'est-ce qui distingue fondamentalement la situation des Palestiniens de Cisjordanie de la situation des Noirs sous l'apartheid sud-africain ?",
+opts:["Les Noirs sud-africains etaient citoyens de l'Etat qui les opprimait, alors que les Palestiniens de Cisjordanie ne sont pas citoyens d'Israel","Il n'y a aucune difference — c'est exactement la meme situation","Les Noirs sud-africains avaient plus de droits que les Palestiniens de Cisjordanie","L'apartheid sud-africain etait plus violent que l'occupation israelienne"],
+ans:0,ex:"<b>C'est une difference juridique fondamentale.</b> Sous l'apartheid, les Noirs etaient citoyens de l'Etat qui les discriminait par des lois internes. Les Palestiniens de Cisjordanie ne sont pas citoyens israeliens — leur situation releve du <b>droit d'occupation belligerante</b>. Les deux situations suscitent des condamnations morales fortes, mais les cadres juridiques applicables sont differents."},
+
+{t:"Apartheid",q:"Selon les Rapporteurs speciaux de l'ONU et des ONG (Amnesty, HRW), sur quels criteres repose l'accusation d'apartheid a l'egard d'Israel ?",
+opts:["Uniquement sur la politique de colonisation en Cisjordanie","Sur la segregation raciale institutionnalisee dans Israel souverain entre Juifs et Arabes","Sur un ensemble de politiques couvrant Israel, la Cisjordanie et Gaza formant selon eux un regime unifie de domination","Sur les declarations de membres du gouvernement israelien"],
+ans:2,ex:"Les rapports d'<b>Amnesty (2022) et HRW (2021)</b> soutiennent que l'apartheid doit s'analyser comme un regime couvrant l'ensemble du territoire (Israel souverain + Cisjordanie + Gaza), pas territoire par territoire. Les critiques methodologiques portent sur : la confusion entre statuts differents, l'absence de comparaison avec d'autres occupations, et la selection des faits. Ces rapports sont serieux mais contestables sur la methode."},
+
+// --- FICHE 3 : GENOCIDE (5 questions) ---
+{t:"Genocide",q:"Le terme juridique 'dolus specialis' dans la definition du genocide designe :",
+opts:["L'ampleur des destructions materielles d'un conflit arme","L'intention specifique de detruire un groupe national, ethnique, racial ou religieux comme tel","Le nombre de victimes civiles sur une periode donnee","Les declarations publiques de dirigeants d'Etat pendant une guerre"],
+ans:1,ex:"<b>Le dolus specialis est l'element intentionnel specifique du genocide.</b> Sans cet element prouve, les faits peuvent constituer des crimes de guerre ou des crimes contre l'humanite, mais pas juridiquement un genocide. La jurisprudence du <b>TPIY</b> (Srebrenica, 1995) et de la <b>CIJ</b> (Bosnie c. Serbie, 2007) l'a confirme."},
+
+{t:"Genocide",q:"Des declarations extremes de ministres israeliens peuvent-elles suffire a prouver juridiquement l'intention genocidaire de l'Etat ?",
+opts:["Oui, elles constituent a elles seules la preuve du dolus specialis","Non, elles sont des indices a examiner mais ne suffisent pas seules pour etablir l'intention de l'Etat","Oui, car les ministres representent la politique officielle de l'Etat","Non, car seul le Premier ministre peut engager la responsabilite de l'Etat"],
+ans:1,ex:"D'apres la jurisprudence de la CIJ (Bosnie c. Serbie, 2007), <b>des declarations d'officiels peuvent constituer des indices</b> mais la preuve doit etre etablie au niveau de la politique d'Etat. Des propos de ministres, meme choquants, ne suffisent pas seuls a qualifier toute la strategie militaire de genocidaire — surtout si d'autres officiels tiennent un discours different."},
+
+{t:"Genocide",q:"Quelle est la valeur juridique de l'ordonnance de la CIJ dans l'affaire Afrique du Sud c. Israel (janvier 2024) ?",
+opts:["Elle juge Israel coupable de genocide","Elle ordonne des mesures conservatoires d'urgence sans se prononcer sur la culpabilite au fond","Elle recommande sans caractere contraignant un cessez-le-feu","Elle condamne Israel a des reparations immediates"],
+ans:1,ex:"<b>L'ordonnance de janvier 2024 est une mesure conservatoire</b> : la CIJ a estime que les droits des Palestiniens protegés par la Convention de 1948 etaient 'plausiblement' en jeu et a ordonne a Israel de prendre des mesures pour prevenir tout acte genocidaire. Elle <b>ne juge pas Israel coupable de genocide</b>. L'affaire au fond peut durer 10 a 20 ans."},
+
+{t:"Genocide",q:"Qu'est-ce qui distingue juridiquement un 'crime contre l'humanite' d'un 'genocide' ?",
+opts:["Le nombre de victimes : au-dela de 10 000 c'est un genocide","Le genocide exige une intention specifique de detruire un groupe comme tel, le crime contre l'humanite ne le requiert pas","Le crime contre l'humanite est commis en temps de paix, le genocide en temps de guerre","Il n'y a aucune difference juridique entre les deux"],
+ans:1,ex:"<b>La distinction est intentionnelle, pas numerique.</b> Un crime contre l'humanite (art. 7 Statut de Rome) est une attaque systematique et generalisee contre une population civile. Le genocide requiert en plus le <b>dolus specialis</b> : l'intention specifique de detruire le groupe <i>comme tel</i>. C'est pourquoi Srebrenica a ete qualifie de genocide (intention de detruire les Bosniaques musulmans) alors que des massacres de masse peuvent ne pas l'etre."},
+
+{t:"Genocide",q:"Pourquoi le defenseur doit-il commencer par la compassion avant d'expliquer la qualification juridique du genocide ?",
+opts:["Pour paraitre plus sympathique et gagner le debat emotionnellement","Parce que commencer par des ratios ou des comparaisons historiques semble froid et donne moralement l'avantage a l'attaquant","Parce que le droit international exige de reconnaitre la souffrance avant de qualifier","Parce que la compassion est juridiquement pertinente pour etablir le dolus specialis"],
+ans:1,ex:"Les fiches de preparation precisent : <b>'ne jamais commencer par des ratios, des comparaisons historiques ou une phrase froide'</b>. Commencer par la compassion ('les civils palestiniens souffrent et chaque mort civile est tragique') empeche l'attaquant de construire l'image d'un defenseur insensible. La qualification juridique vient ensuite, plus facilement entendue. C'est une strategie rhetorique, pas une concession sur le fond."},
+
+// --- FICHE 4 : 7 OCTOBRE (5 questions) ---
+{t:"7 octobre",q:"En droit international humanitaire, le ciblage delibere de civils lors d'un conflit arme est :",
+opts:["Autorise si la cause politique est consideree juste","Permis dans les conflits asymetriques de resistance","Interdit de facon absolue pour toutes les parties, y compris les mouvements de resistance","Conditionne a l'approbation du Conseil de securite"],
+ans:2,ex:"<b>Les Protocoles additionnels (1977) aux Conventions de Geneve interdisent absolument le ciblage delibere de civils</b>, la prise d'otages et les violences sexuelles. Cette interdiction est absolute et s'applique aux acteurs etatiques <i>et</i> non etatiques. Il n'existe pas d'exception pour les conflits asymetriques ou les luttes de liberation nationale."},
+
+{t:"7 octobre",q:"Le droit de la resistance a l'occupation interdit-il de cibler des civils ?",
+opts:["Non, la resistance a l'occupation legitime tous les moyens","Oui, meme une cause consideree juste ne permet pas de cibler deliberement des civils","Non, si les civils appartiennent a un Etat occupant","Oui, mais seulement si l'occupation dure depuis plus de 30 ans"],
+ans:1,ex:"<b>Le droit de resistance n'emporte pas autorisation de cibler des civils.</b> Le droit international humanitaire distingue la legitimite d'une cause (politique) et la licite des moyens employes (droit). Meme si l'on accepte qu'un peuple occupe a le droit de resister, les Protocoles additionnels lui interdisent de cibler des non-combattants, de prendre des otages ou de commettre des violences sexuelles."},
+
+{t:"7 octobre",q:"Quelle est la bonne reponse a la question 'pourquoi commencez-vous toujours l'histoire le 7 octobre ?' ?",
+opts:["Parce que l'histoire commence le 7 octobre 2023","Accepter que le contexte historique existe mais maintenir que le contexte n'innocente pas les actes commis ce jour","Ignorer la question car elle detourne du sujet","Rappeler immediatement le nombre de morts israeliens pour couper court"],
+ans:1,ex:"<b>Le contexte explique parfois, il n'innocente pas.</b> La bonne reponse accepte que l'histoire du conflit soit longue (occupation, blocus, Nakba) et que le 7 octobre n'est pas un point de depart arbitraire — tout en maintenant que ce contexte n'efface pas la responsabilite du Hamas pour les actes commis. Cette posture evite de sembler ignorer l'histoire tout en refusant la justification morale."},
+
+{t:"7 octobre",q:"Pourquoi est-il rhetoriquement dangereux de repondre aux arguments sur le 7 octobre par une deshumanisation des Palestiniens ?",
+opts:["Parce que c'est faux factuellemen","Parce que cela sortirait le defenseur du cadre pedagogique et moral, permettant a l'attaquant de presenter la defense d'Israel comme raciste","Parce que cela violerait le droit international humanitaire","Parce que cela donnerait raison aux ONG critiques"],
+ans:1,ex:"Les fiches de preparation precisent : <b>'ne pas repondre par une deshumanisation des Palestiniens. La cible argumentative est le Hamas et la justification du massacre, pas un peuple.'</b> Une reponse deshumanisante donnerait a l'attaquant une victoire morale immediate et deplacerait le debat du comportement du Hamas vers le racisme presume du defenseur."},
+
+{t:"7 octobre",q:"Comment repondre a 'le Hamas est ne de l'humiliation et du blocus, il est le produit de la situation' ?",
+opts:["Nier que le blocus a eu des effets sur la population de Gaza","Accepter que le contexte politique explique l'emergence du Hamas sans que cela justifie ses methodes","Affirmer que le Hamas n'aurait jamais du exister","Soutenir qu'Israel n'est pas responsable du blocus"],
+ans:1,ex:"<b>L'explication et la justification sont deux choses differentes.</b> On peut reconnaitre que les conditions politiques (blocus, occupation, Accord d'Oslo bloque) ont favorise l'emergence du Hamas sans en conclure que ses methodes sont legitimees. Le Hamas a <b>choisi</b> des methodes specifiques — massacre de civils, prises d'otages — qui restent interdites par le DIH quelles que soient les causes."},
+
+// --- FICHE 5 : ANTISIONISME (5 questions) ---
+{t:"Antisionisme",q:"Selon la definition de travail de l'IHRA (2016), lequel de ces comportements est un exemple d'antisemitisme ?",
+opts:["Critiquer la politique de colonisation en Cisjordanie","Soutenir la creation d'un Etat palestinien","Tenir les Juifs de la diaspora collectivement responsables des actions du gouvernement israelien","Debattre du statut juridique de Jerusalem-Est"],
+ans:2,ex:"<b>La responsabilisation collective</b> est explicitement citee par l'IHRA (2016). Les trois autres options relevent de debats politiques legitimes selon la meme definition. La distinction est entre critiquer des decisions precises d'un gouvernement (legitime) et tenir un groupe ethnique ou religieux responsable en tant que groupe (antisemite)."},
+
+{t:"Antisionisme",q:"Des Juifs antisionistes existent. Cela prouve-t-il que l'antisionisme ne peut jamais etre antisemite ?",
+opts:["Oui, car un Juif antisioniste ne peut pas etre antisemite par definition","Oui, car le pluralisme juif invalide toute accusation d'antisemitisme","Non, car un argument se juge sur ses criteres, pas sur l'identite de celui qui le formule","Non, car tous les Juifs antisionistes sont en realite antisemites"],
+ans:2,ex:"<b>Le pluralisme juif ne valide pas automatiquement toute these.</b> Un argument se juge sur ses faits, sa logique et ses criteres — double standard, diabolisation, delegitimation — independamment de l'identite de son auteur. Une critique juive peut etre legitime, excessive ou instrumentalisee comme n'importe quelle autre critique."},
+
+{t:"Antisionisme",q:"Quelle est la difference entre antisionisme politique et antisemitisme selon les criteres academiques et l'IHRA ?",
+opts:["Il n'y en a aucune : antisionisme et antisemitisme sont synonymes","L'antisionisme cible un gouvernement, l'antisemitisme cible un peuple — la frontiere est dans la precision et l'universalite du critere applique","L'antisionisme est legal, l'antisemitisme est illegal","L'antisionisme est une position politique de gauche, l'antisemitisme est d'extreme droite"],
+ans:1,ex:"<b>La frontiere n'est pas entre critiquer et defendre Israel, mais entre critique precise et delegitimation/double standard.</b> Critiquer la politique de colonisation est politique et leger. Nier le droit d'existence d'Israel ou comparer systematiquement ses dirigeants a Hitler bascule selon les criteres IHRA. La question cle : appliques-tu le meme critere aux autres peuples et Etats ?"},
+
+{t:"Antisionisme",q:"Le slogan 'De la riviere a la mer, la Palestine sera libre' est-il antisemite ?",
+opts:["Non, c'est une expression du droit a l'autodetermination palestinien et il est toujours legitime","Oui, il est toujours antisemite car il nie l'existence d'Israel","Son interpretation est debattue : selon qui l'utilise et quel sens lui est donne, il peut aller de l'aspiration a la liberte a l'appel a l'elimination d'un Etat","C'est uniquement un probleme de droit penal francais ou americain, pas une question de droit international"],
+ans:2,ex:"<b>Le debat sur ce slogan est reel et nuance.</b> Certains l'utilisent comme expression de l'aspiration a l'egalite et la liberte. D'autres l'interpretent comme un appel a l'elimination d'Israel entre le Jourdain et la Mediterranee. La <b>Cour europeenne des droits de l'homme</b> et plusieurs juridictions nationales ont produit des jurisprudences divergentes. Le contexte d'enonciation et l'intention sont determinants."},
+
+{t:"Antisionisme",q:"Pourquoi la formule 'tout antisionisme est antisemite' est-elle deconseille comme reponse principale ?",
+opts:["Parce qu'elle est juridiquement fausse selon le droit francais","Parce qu'elle est trop large, ferme le debat et donne a l'attaquant la victoire morale en le faisant passer pour victime de censure","Parce qu'elle ne correspond pas a la definition IHRA","Parce qu'elle est utilisee uniquement par des lobbyistes pro-Israel"],
+ans:1,ex:"Les fiches precisent : <b>'eviter la formule trop large : tout antisionisme est antisemite. Elle ferme le debat. La force vient de la frontiere argumentee.'</b> La formule large permet a l'adversaire de se presenter comme victime de censure et de gagner le terrain moral. La methode efficace est de tracer la frontiere cas par cas : double standard, diabolisation, delegitimation, responsabilisation collective."},
+
+// --- FICHE 6 : COLONISATION (5 questions) ---
+{t:"Colonisation",q:"La resolution 181 de l'ONU (novembre 1947) prevoyait :",
+opts:["L'expulsion de toute la population arabe de Palestine","Un plan de partage : Etat juif, Etat arabe et statut international pour Jerusalem","La creation d'un Etat binational sous tutelle de l'ONU","Le maintien indefini du Mandat britannique sur la Palestine"],
+ans:1,ex:"<b>La resolution 181 (29 novembre 1947) proposait un plan de partage</b> : ~56% pour l'Etat juif, ~43% pour l'Etat arabe, Jerusalem sous tutelle internationale. Accepte par l'Agence juive, rejete par les Etats arabes. La guerre de 1948 aboutit a la Nakba et a des frontieres differentes du plan initial (armistices de 1949 = Ligne verte)."},
+
+{t:"Colonisation",q:"Les Juifs mizrahim representent quelle part approximative de la population juive israelienne ?",
+opts:["Environ 5 a 10%","Environ 20%","Environ 50% ou plus","Moins de 5%"],
+ans:2,ex:"<b>Les Juifs mizrahim (Moyen-Orient et Afrique du Nord) et sefardades constituent environ la moitie de la population juive israelienne.</b> Beaucoup ont fui ou ete expulses de pays arabes (Irak, Maroc, Yemen, Egypte, Algerie) apres 1948. Ce fait contredit le recit d'un Israel purement europeen et complique le cadre 'colonisateurs europeens vs indigènes'."},
+
+{t:"Colonisation",q:"Le mot 'Juif' vient etymologiquement de :",
+opts:["L'hebreu 'Yehudi', derive de Yehuda (Judee), une region historique entre le Jourdain et la Mediterranee","Le latin 'Judaeus', sans lien avec une geographie particuliere","Le grec 'Ioudaios', signifiant 'etranger de l'Est'","L'arabe 'Yahoud', apparu au VIIe siecle"],
+ans:0,ex:"<b>'Juif' derive de Yehudi (hebreu), lie a Yehuda/Judee</b> — la region historique qui comprend aujourd'hui une partie de la Cisjordanie et d'Israel. Ce lien etymologique et historique est l'un des arguments avances contre le recit d'une implantation purement moderne et etrangere. Il ne cree pas de droit de propriete actuel, mais refute l'idee que la presence juive dans la region serait une invention recente."},
+
+{t:"Colonisation",q:"Quelle est la definition du droit au retour revendiqu par les Palestiniens, et quelle est sa base en droit international ?",
+opts:["Le droit pour tout Palestinien d'obtenir automatiquement la citoyennete israelienne","Le droit des refugies palestiniens de 1948 et leurs descendants a retourner dans leurs foyers d'origine, fonde sur la resolution 194 (AG ONU, 1948)","Un droit reconnu par la CIJ comme superieur au droit d'autodetermination israelien","Un droit cree par les Accords d'Oslo de 1993"],
+ans:1,ex:"<b>La resolution 194 (1948) de l'AG stipule que les refugies desirant rentrer chez eux et vivre en paix avec leurs voisins devraient pouvoir le faire.</b> Israel conteste l'interpretation de cette resolution comme creant un droit individuel opposable et souleve les questions demographiques et securitaires. Le statut de ce droit reste l'un des points les plus controverses du droit international applique au conflit."},
+
+{t:"Colonisation",q:"Comment repondre a 'l'archeologie ne justifie pas l'expulsion de vivants' sans nier le recit palestinien ?",
+opts:["En affirmant que l'archeologie prouve un droit de propriete actuel sur les territoires","En reconnaissant que deux recits nationaux existent et que la paix commence quand on cesse d'effacer l'un des deux","En expliquant que les Palestiniens n'ont jamais constitue un peuple distinct","En rappelant que les Romains ont expulse les Juifs et que tout le reste en decoule"],
+ans:1,ex:"Les fiches precisent : <b>'deux recits nationaux se rencontrent ; reduire l'un a colon empeche toute solution.'</b> La bonne posture reconnait la legitimite du recit palestinien (Nakba, deplacement, souffrance) sans nier le recit juif (lien historique, continuite culturelle, persecutions). Ni 'il n'y avait pas de Palestiniens' ni 'les Juifs sont des etrangers' — ces deux formules radicalisent l'echange."},
+
+// --- FICHE 7 : DISPROPORTION (5 questions) ---
+{t:"Disproportion",q:"En droit international humanitaire, la proportionnalite d'une attaque s'evalue :",
+opts:["En comparant le nombre total de morts des deux camps sur l'ensemble du conflit","Operation par operation, en comparant l'avantage militaire attendu aux dommages civils previsibles","En fonction de la puissance militaire respective des belligerants","Uniquement par rapport aux pertes dans des conflits historiques comparables"],
+ans:1,ex:"<b>Le Protocole additionnel I (1977) impose une analyse operation par operation.</b> L'avantage militaire concret et direct attendu doit etre mis en balance avec les dommages civils previsibles. Un ratio global de victimes — 30 Palestiniens pour 1 Israelien — ne suffit pas a qualifier juridiquement une violation. La question est : pour chaque frappe specifique, l'avantage militaire attendu etait-il proportionne ?"},
+
+{t:"Disproportion",q:"Un camp qui tue trente fois plus de civils que l'autre est-il automatiquement le camp qui viole le droit international ?",
+opts:["Oui, l'asymetrie des pertes prouve la violation","Non, la proportionnalite juridique n'est pas un compteur de morts entre deux camps","Oui, car la superiorite militaire cree une responsabilite absolue","Oui, si le ratio depasse 10 pour 1"],
+ans:1,ex:"<b>La proportionnalite juridique n'est pas un ratio de morts.</b> Des facteurs comme la guerre urbaine dense, l'absence d'uniformes de combattants, l'utilisation de tunnels et d'infrastructures civiles produisent des bilans civils eleves sans que chaque frappe viole necessairement le droit. L'analyse doit etre operationnelle — pas emotionnelle ou statistique globale."},
+
+{t:"Disproportion",q:"Que dit le Protocole additionnel I sur la responsabilite d'un combattant qui utilise des civils comme boucliers humains ?",
+opts:["Que l'adversaire peut alors attaquer librement sans contrainte de proportionnalite","Que cela est interdit mais n'exonere pas l'adversaire de ses obligations de precaution et de proportionnalite","Que les deux parties sont egalement exemptees du respect du droit humanitaire","Que cela ne constitue pas une infraction au droit international humanitaire"],
+ans:1,ex:"<b>L'art. 51.7 du Protocole I interdit d'utiliser la presence civile comme bouclier.</b> Mais cette violation d'une partie <b>n'exonere pas l'autre</b> : elle peut etre prise en compte dans l'analyse de proportionnalite (si la presence civile est due au Hamas, l'attaquant peut avoir une marge), mais ne supprime pas l'obligation de precaution. Les deux interdictions sont cumulatives et independantes."},
+
+{t:"Disproportion",q:"Comment se definit l'objectif militaire legitime au sens du Protocole additionnel I ?",
+opts:["Tout batiment situe dans une zone de combat","Les objets qui par leur nature, emplacement, destination ou utilisation apportent une contribution effective a l'action militaire, et dont la destruction presente un avantage militaire precis","Tout lieu ou un soldat ennemi a ete observe","Toute infrastructure civile pouvant theoriquement servir a des fins militaires"],
+ans:1,ex:"<b>L'art. 52 du Protocole I exige deux elements cumulatifs</b> : contribution effective a l'action militaire ET avantage militaire precis en cas de destruction. Une ecole, un hopital ou une mosquee peuvent devenir des cibles legitimes si les deux conditions sont reunies — mais la preuve doit etre etablie. La qualification abusive de cibles civiles en objectifs militaires est un piege rhetorique frequent."},
+
+{t:"Disproportion",q:"Pourquoi les comparaisons historiques (Dresde, Hiroshima, etc.) sont-elles a manier avec prudence dans ce debat ?",
+opts:["Parce qu'elles sont toujours fausses factuellemen","Parce qu'elles peuvent etre utiles pour contextualiser mais doivent venir apres le recadrage juridique, sinon elles semblent relativiser la souffrance presente","Parce que le droit international humanitaire moderne interdit les comparaisons historiques","Parce qu'elles favorisent toujours Israel dans le debat"],
+ans:1,ex:"Les fiches precisent : <b>'eviter les comparaisons historiques trop abruptes si l'auditoire est emotionnellement charge.'</b> Des comparaisons avec Dresde ou d'autres bombardements massifs peuvent sembler minimiser la souffrance des victimes actuelles ou normaliser des violations. Elles sont potentiellement utiles pour contextualiser la guerre urbaine — mais seulement apres avoir etabli le cadre juridique et la compassion pour les victimes."},
+
+// --- FICHE 8 : BLOCUS/FAMINE (5 questions) ---
+{t:"Blocus/famine",q:"Que dit l'art. 8 du Statut de Rome sur l'utilisation de la famine comme methode de guerre ?",
+opts:["C'est interdit mais n'est pas qualifie de crime de guerre","C'est un crime de guerre si le caractere delibere d'affamer les civils est etabli","C'est uniquement un crime contre l'humanite","C'est autorise si un blocus naval a ete declare legalement"],
+ans:1,ex:"L'<b>art. 8(2)(b)(xxv) du Statut de Rome</b> qualifie de crime de guerre 'le fait d'affamer deliberement des civils comme methode de guerre'. La difficulte est de prouver le <b>caractere delibere</b> — distinct des effets humanitaires catastrophiques d'un blocus securitaire ou du chaos de guerre. La CPI a ouvert une enquete formelle sur ce point concernant Gaza en 2024."},
+
+{t:"Blocus/famine",q:"Un blocus naval peut-il etre legal en droit international selon le Manuel de San Remo (1994) ?",
+opts:["Non, un blocus contre une population civile est toujours illegal","Oui, s'il est notifie et n'a pas pour seul but de priver les civils de biens indispensables","Oui, sans aucune condition","Non, car Gaza n'est pas un Etat reconnu"],
+ans:1,ex:"<b>Le droit coutumier (Manuel de San Remo, Regle 93 CICR) autorise les blocus sous conditions</b> : notification formelle, non-discrimination, et interdiction si le seul but est d'affamer les civils. Le rapport de la commission Palmer (ONU, 2011) avait juge le blocus de Gaza legal mais ses restrictions 'excessives et contraires au droit humanitaire'. La legalite reste juridiquement contestee."},
+
+{t:"Blocus/famine",q:"Quelle est la distinction entre 'resultat humanitaire catastrophique' et 'arme de famine deliberee' en droit penal international ?",
+opts:["Il n'y en a aucune : la famine est toujours un crime de guerre","L'intention delibere d'affamer doit etre etablie ; un bilan humanitaire catastrophique peut resulter de la guerre sans constituer un crime de guerre","La famine est un crime uniquement si elle touche plus de 100 000 personnes","La famine est un crime uniquement si un tribunal international le declare formellement"],
+ans:1,ex:"<b>L'element intentionnel est decisif.</b> Une famine peut resulter d'une combinaison de facteurs : destruction des infrastructures, deplacement de populations, chaos logistique, detournement de l'aide par des groupes armes. Pour qu'il y ait crime de guerre, il faut prouver que la privation de nourriture etait <i>deliberement</i> utilisee comme instrument de guerre. C'est l'enjeu des enquetes de la CPI et des rapporteurs speciaux de l'ONU."},
+
+{t:"Blocus/famine",q:"Comment des rapports de l'OCHA, Reuters et AP ont-ils documente le role du Hamas dans la chaine humanitaire ?",
+opts:["Ces organisations ont affirme qu'Israel est seul responsable de la famine a Gaza","Ces organisations ont documente des incidents de detournement et vol d'aide par des groupes armes, dont le Hamas","Ces organisations ont conclu que le Hamas facilitait efficacement la distribution de l'aide","Ces organisations n'ont publie aucun rapport sur le sujet"],
+ans:1,ex:"<b>OCHA, Reuters et AP ont documente des incidents de pillage et de detournement d'aide</b> par des groupes armes a Gaza, amenant l'ONU a suspendre ponctuellement des convois. Ce phenomene ne supprime pas les obligations d'Israel mais complexifie la chaine de responsabilite. Les deux acteurs — Israel et Hamas — ont des responsabilites distinctes dans la protection des civils et l'acces a l'aide."},
+
+{t:"Blocus/famine",q:"Pourquoi la posture rhetorique est-elle particulierement importante quand on discute du sujet humanitaire ?",
+opts:["Parce que les arguments de fond ne comptent pas sur ce sujet","Parce que sur l'humanitaire, paraitre insensible ou cynique detruit toute credibilite avant meme d'avoir pose un argument","Parce que le droit international humanitaire impose une posture particuliere aux debatteurs","Parce que les juges et arbitres internationaux evaluent la posture des parties"],
+ans:1,ex:"Les fiches precisent : <b>'ne pas repondre avec ironie ou chiffres secs. Sur l'humanitaire, la posture compte autant que l'argument.'</b> Commencer par 'la faim et l'effondrement humanitaire sont insupportables' avant tout argument technique ou juridique est indispensable. Une reponse qui semble minimiser la souffrance des civils est perdue d'avance rhetoriquement, meme si elle est juridiquement correcte."},
+
+// --- FICHE 9 : FLOTTILLE (5 questions) ---
+{t:"Flottille",q:"L'objectif declare d'une flottille humanitaire suffit-il a legitimer tous ses modes d'acheminement ?",
+opts:["Oui, une cargaison humanitaire est toujours legitime quelle que soit la methode","Non, la legitimite de l'objectif ne rend pas automatiquement legitimes tous les modes d'acheminement","Oui, car le droit international protege les missions humanitaires sans restriction","Non, car toutes les flottilles sont en realite des operations politiques"],
+ans:1,ex:"<b>La legitimite de l'objectif ne garantit pas celle du moyen.</b> Une cargaison humanitaire peut etre transferee via des points d'inspection sans acces direct non controle a Gaza. Si l'objectif est reellement humanitaire, pourquoi refuser une inspection qui prouverait la nature de la cargaison et accelererait sa livraison ? Le refus d'inspection suggere que la flottille est aussi une operation de communication politique."},
+
+{t:"Flottille",q:"Qu'a conclu le rapport Palmer de l'ONU (2011) sur l'interception du Mavi Marmara ?",
+opts:["Il a condamne Israel pour violation du droit de la mer","Il a juge le blocus maritime de Gaza legal mais l'intervention militaire lors de l'abordage excessive","Il a conclu que le Mavi Marmara transportait des armes","Il a exonere completement Israel de toute responsabilite"],
+ans:1,ex:"<b>Le rapport Palmer (commission nommee par le Secretaire general de l'ONU, 2011)</b> a conclu : (1) le blocus maritime est legal en droit international ; (2) l'interception du navire en haute mer etait justifiee dans ce contexte ; (3) le niveau de force utilise lors de l'abordage etait <b>excessif et injustifiable</b>. 9 militants turcs ont ete tues. Cette distinction illustre qu'on peut juger le blocus legal et l'intervention excessive."},
+
+{t:"Flottille",q:"Quel argument Israel avance-t-il pour justifier le controle des cargaisons a destination de Gaza ?",
+opts:["Empecher l'entree de denrees alimentaires pouvant nourrir le Hamas","Prevenir l'introduction d'armes, de materiel a double usage ou de materiel militaire par le Hamas","Exercer un droit de retorsion economique pour les attaques du Hamas","Appliquer les sanctions economiques votees par le Conseil de securite"],
+ans:1,ex:"<b>Israel invoque la prevention de l'introduction d'armes et de materiel a double usage</b> (ciment pour les tunnels, electronique pour les systemes d'armement). C'est l'argument juridique central : les blocus sont reconnus en droit de la guerre maritime comme moyen de priver l'adversaire de ressources militaires. La question est de savoir si les restrictions vont au-dela de ce qui est necessaire a cet objectif et privent les civils de biens essentiels."},
+
+{t:"Flottille",q:"Pourquoi une flottille peut-elle etre une operation de communication politique autant qu'humanitaire ?",
+opts:["Parce qu'elle est financee par des partis politiques","Parce qu'elle produit necessairement des images de confrontation entre militants civils et forces militaires, quelle que soit la realite de la cargaison","Parce qu'elle transgresse toujours le droit international","Parce qu'elle est organisee par des gouvernements etrangers"],
+ans:1,ex:"<b>La confrontation physique avec une force militaire produit des images politiquement puissantes</b> independamment du contenu de la cargaison. L'objectif de briser le blocus par la force symbolique d'un confrontation mediatique est distinct de l'objectif de maximiser l'aide reelle aux civils. Des canaux d'acheminement controles auraient permis plus d'aide concrete tout en evitant la confrontation — sauf si la confrontation etait elle-meme l'objectif."},
+
+{t:"Flottille",q:"Comment repondre a 'vous criminalisez meme l'aide humanitaire' sans sembler defendre le blocus ?",
+opts:["En niant que le blocus ait des effets humanitaires negatifs","En distinguant : soutenir l'aide aux civils et questionner si une flottille de confrontation est le meilleur moyen d'y parvenir","En affirmant que le Hamas empeche de toute facon toute aide d'arriver","En citant uniquement les aspects juridiques du droit des blocus"],
+ans:1,ex:"Les fiches precisent : <b>'je soutiens l'aide aux civils ; je questionne la mise en scene d'une confrontation.'</b> Cette formulation separe l'objectif (aide humanitaire, legitime) et le moyen (flottille de confrontation, discutable). Elle permet de ne pas sembler defendre le blocus tout en questionnant si la flottille est le meilleur moyen d'atteindre l'objectif declare."},
+
+// --- FICHE 10 : SIONISME (5 questions) ---
+{t:"Sionisme",q:"La resolution 3379 de l'ONU (1975) qui declarait 'le sionisme est une forme de racisme' a ete :",
+opts:["Confirmee par la CIJ en 1992","Annulee par la resolution 46/86 (1991) a 111 voix pour","Remplacee par une resolution plus nuancee en 1993","Maintenue jusqu'a ce jour sans modification"],
+ans:1,ex:"La resolution 3379 a ete <b>annulee par la resolution 46/86 (16 decembre 1991) a 111 voix pour, 25 contre, 13 abstentions</b>. Elle avait ete adoptee dans le contexte de la Guerre froide et du bloc sovietico-arabe. Son annulation, obtenue apres la fin de la Guerre froide et la Guerre du Golfe, illustre que les votes onusiens refletent des rapports de forces politiques changeants."},
+
+{t:"Sionisme",q:"Le test democratique d'un Etat-nation ayant une identite majoritaire constitutive est :",
+opts:["L'absence totale d'identite nationale ou religieuse majoritaire","L'egalite des droits civiques de tous les citoyens independamment de leur appartenance a la majorite","Le fait que tous les citoyens parlent la meme langue","Le fait que la majorite nationale represente plus de 70% de la population"],
+ans:1,ex:"<b>L'egalite des droits civiques est le critere democratique pertinent.</b> La France, le Japon, la Grece ou les pays scandinaves ont des identites nationales constitutives sans etre qualifies d'Etats racistes. La question legitime pour Israel est celle de l'egalite reelle des citoyens arabes — pas le droit national juif en lui-meme. Refuser uniquement aux Juifs un droit national reconnu a d'autres peuples pose un probleme de double standard."},
+
+{t:"Sionisme",q:"La loi du retour israelienne (1950) est souvent citee comme preuve du privilege ethnique. Quelle est la reponse argumentee ?",
+opts:["En affirmant que la loi du retour ne concerne pas les non-Juifs","En notant que de nombreux Etats ont des lois de retour preferentielles pour leur diaspora, et en distinguant droit preferentiel et droit exclusif","En niant que la loi du retour ait des effets discriminatoires","En expliquant que cette loi a ete adoptee apres la Shoah et est donc permanente"],
+ans:1,ex:"<b>De nombreux Etats ont des lois de retour preferentielles pour leur diaspora</b> : Allemagne (art. 116 GG), Grece, Irlande, Pologne, Inde (OCI), Chine, etc. La question pertinente n'est pas l'existence d'un droit preferentiel (commun), mais si l'egalite civique des non-Juifs est garantie dans l'Etat. C'est la ou la discussion democratique legitime se joue, pas sur le principe d'un droit de retour."},
+
+{t:"Sionisme",q:"Quel est le mouvement sioniste revisioniste fonde par Ze'ev Jabotinsky, et en quoi se distinguait-il des autres courants ?",
+opts:["Un courant pacifiste sioniste qui preconisait un accord avec les Arabes de Palestine","Un courant nationaliste d'autodetermination juive intransigeante, qui s'opposait au sionisme socialiste et preconisait un Etat juif sur les deux rives du Jourdain","Le courant fondateur du mouvement kibboutznik","Le courant religieux qui s'opposait au sionisme seculier"],
+ans:1,ex:"<b>Le sionisme revisioniste de Jabotinsky</b> (fonde dans les annees 1920-30) preconisait un Etat juif sur les deux rives du Jourdain (incluant la Transjordanie actuelle), s'opposait aux concessions sur les frontieres et preconisait la creation d'une force armee juive. Il s'opposait au sionisme travailliste de Ben Gourion. Le Likoud est consideree comme son heritier politique. Cette diversite interne au sionisme contredit sa reduction a une ideologie homogene."},
+
+{t:"Sionisme",q:"Pourquoi la comparaison 'sionisme = nazisme' est-elle identifiee comme marqueur antisemite selon l'IHRA ?",
+opts:["Parce qu'elle est historiquement fausse sur tous les points","Parce qu'elle constitue de la diabolisation : comparer systematiquement Israel et ses soutiens au mal absolu historique, ce qui nie la specificite de la Shoah et deshumanise","Parce qu'elle est interdite par la loi en France","Parce qu'Israel n'a jamais commis de crimes comparables aux nazis"],
+ans:1,ex:"L'IHRA cite explicitement comme exemple d'antisemitisme : <b>'faire des comparaisons entre la politique israelienne contemporaine et celle des nazis'</b>. La raison : cette comparaison specifique (et pas n'importe quelle comparaison historique) constitue une <b>diabolisation</b> qui assimile les Juifs au mal absolu de leur propre histoire. Elle ne signifie pas qu'Israel ne peut pas etre critique severement, mais que cette comparaison specifique bascule dans l'antisemitisme selon les criteres academiques et l'IHRA."},
+
+// --- FICHE 11 : MEDIAS/IMAGES (5 questions) ---
+{t:"Medias/images",q:"Bellingcat est :",
+opts:["Une ONG humanitaire active a Gaza depuis 2007","Un groupe d'investigation specialise en OSINT pour verifier faits et images de conflit","Une agence de presse proche du gouvernement israelien","Un organe de la CPI charge des crimes de guerre"],
+ans:1,ex:"<b>Bellingcat est un collectif d'investigation fonde en 2014</b>, pionnier de l'OSINT (Open Source Intelligence). Il utilise images satellites, metadonnees, geolocalisation et reseaux sociaux pour verifier des evenements de conflit. Il a documente le crash du MH17 (2014), l'empoisonnement de Skripal (2018) et produit des verifications sur des images du conflit a Gaza."},
+
+{t:"Medias/images",q:"Une image authentique (non manipulee) peut-elle induire en erreur sur la responsabilite d'un evenement ?",
+opts:["Non, une image authentique dit toujours la verite sur ce qu'elle montre","Oui, elle peut etre utilisee avec une legende fausse, une mauvaise date ou une mauvaise attribution","Non, si plusieurs medias publient la meme image, sa legende est correcte","Oui, mais seulement si elle provient d'une source militante"],
+ans:1,ex:"<b>Une image authentique peut etre utilisee hors contexte.</b> La meme photo peut etre publiee avec une mauvaise date, un mauvais lieu, une mauvaise attribution de responsabilite. Des cas documentes (image de destruction en Syrie attribuee a Gaza, photo de victimes de conflits anterieurs) illustrent ce phenomene. L'image montre un resultat visible — pas l'auteur, l'intention ou la cible."},
+
+{t:"Medias/images",q:"Quelles sont les deux regles fondamentales pour evaluer les chiffres de victimes en temps de conflit ?",
+opts:["Les chiffres du gouvernement israelien sont plus fiables que ceux du Hamas","Les chiffres doivent etre dates, sources et qualifies (civils vs. combattants vs. total) avant d'etre utilises dans une argumentation","Il faut toujours diviser par deux les chiffres annonces par les parties au conflit","Seuls les chiffres de l'ONU ont une valeur fiable"],
+ans:1,ex:"<b>Les fiches precisent : 'les chiffres en temps de guerre evoluent et doivent etre dates, sources et qualifies.'</b> La distinction entre civils et combattants est methodologiquement complexe et contestee. Les donnees du ministere de la sante de Gaza (Hamas) sont celles que l'ONU et les grands medias utilisent par defaut, en les annotant de reserves sur la methodologie. Elles sont considerees comme globalement fiables pour les totaux, moins pour la distinction civils/combattants."},
+
+{t:"Medias/images",q:"Pourquoi la formule 'ce sont toutes des fausses images' est-elle une erreur rhetorique et morale ?",
+opts:["Parce qu'elle est juridiquement fausse","Parce que cette generalisation est intenable et moralement desastreuse : elle nie en bloc une souffrance reelle et documentee","Parce qu'elle viole le droit de la presse","Parce qu'elle donne raison aux medias pro-palestiniens"],
+ans:1,ex:"Les fiches precisent explicitement : <b>'ne pas dire ce sont toutes des fausses images. Cette generalisation est intenable et moralement desastreuse.'</b> La destruction de Gaza est massivement documentee par des sources independantes, des satellites commerciaux et des journalistes de nombreuses nationalites. Nier en bloc la realite visible detruit toute credibilite et donne l'image d'un negationnisme sur la souffrance palestinienne."},
+
+{t:"Medias/images",q:"Qu'est-ce que le 'deadnaming' d'images en contexte de conflit, et pourquoi est-ce important a identifier ?",
+opts:["La technique de manipulation des metadonnees d'une image pour en changer la date","La reutilisation d'une image d'un conflit anterieur ou d'un autre pays avec une legende attribuant la responsabilite a un autre acteur","La censure systematique des images defavorables a un belligerant","La fabrication numerique d'images par intelligence artificielle"],
+ans:1,ex:"La <b>reutilisation d'images hors contexte</b> est l'une des formes les plus frequentes de desinformation en temps de conflit. Des exemples documentes : photos de victimes de la guerre civile syrienne publiees comme victimes de frappes israeliennes, images de Gaza utilisees pour illustrer des evenements en Cisjordanie ou vice-versa. La verification de la date et du lieu via les metadonnees EXIF et la geolocalisation est la methode standard pour detecter ce phenomene."},
+
+// --- FICHE 12 : JUIFS CRITIQUES (5 questions) ---
+{t:"Juifs critiques",q:"Pourquoi l'argument 'meme des Juifs critiquent Israel' ne suffit pas a valider automatiquement une these antisioniste radicale ?",
+opts:["Parce que les Juifs critiques d'Israel sont necessairement de mauvaise foi","Parce qu'un argument se juge sur ses faits et sa logique, pas sur l'identite de celui qui le formule","Parce que la communaute juive est unanime dans son soutien a Israel","Parce que tout antisionisme est par definition antisemite"],
+ans:1,ex:"<b>L'argument ad auctoritatem substitue l'identite de l'orateur a la qualite des preuves.</b> Le pluralisme juif est reel — il prouve que des debats existent, pas que toute these est juste. L'argument doit etre evalue sur ses faits, sa methode et ses criteres — double standard, diabolisation, delegitimation — independamment de qui le prononce."},
+
+{t:"Juifs critiques",q:"Qu'est-ce que le 'tokenisme' dans le contexte du debat Israel/Palestine ?",
+opts:["La pratique d'utiliser des tokens numeriques pour financer des ONG pro-palestiniennes","L'utilisation d'individus representant une minorite comme caution symbolique pour valider une position, au lieu d'evaluer les arguments sur le fond","La traduction automatique des arguments entre langues","La technique de citer des sources en hors contexte"],
+ans:1,ex:"<b>Le tokenisme</b> consiste a utiliser un individu appartenant a un groupe minoritaire (ici, des Juifs antisionistes) comme validation automatique d'une these, en lieu et place d'arguments. Les fiches precisent : <b>'utiliser certains Juifs contre d'autres peut devenir une strategie de caution morale.'</b> Le pluralisme interne a un groupe ne valide pas toutes les positions exprimees en son nom."},
+
+{t:"Juifs critiques",q:"Comment repondre a 'tu vas traiter ces Juifs d'antisemites aussi ?' sans delégitimer des Juifs critiques d'Israel ?",
+opts:["En affirmant que tous les Juifs antisionistes sont antisemites","En ne repondant pas a cette question","En maintenant que l'identite d'une personne ne valide pas automatiquement son argument, et en revenant au contenu precis de la these en question","En affirmant que ces Juifs sont instrumentalises par des mouvements hostiles a Israel"],
+ans:2,ex:"Les fiches precisent : <b>'ne pas attaquer personnellement les Juifs critiques d'Israel. Cela donne a l'attaquant une victoire immediate.'</b> La bonne reponse reconnait le pluralisme juif (<i>'oui, ces voix existent et meritent d'etre entendues'</i>), puis revient au contenu : quelle phrase exacte, quel fait, quelle conclusion ? Est-ce une critique politique legitime ou y a-t-il delegitimation, double standard ou diabolisation ?"},
+
+{t:"Juifs critiques",q:"Pourquoi opposer 'bons Juifs' (critiques d'Israel) et 'mauvais Juifs' (communautaires) est-il une forme de division problematique ?",
+opts:["Parce que tous les Juifs communautaires soutiennent Israel","Parce que cette division reproduit une logique de jugement de l'authenticite juive selon l'opinion politique, ce qui est en soi discriminatoire","Parce qu'elle donne trop d'importance aux voix juives","Parce qu'elle serait interdite par la definition IHRA de l'antisemitisme"],
+ans:1,ex:"<b>Juger de l'authenticite ou de la legitimite d'un Juif selon son opinion politique sur Israel reproduit une logique discriminatoire.</b> Les communautes juives sont politiquement et intellectuellement diverses. Certains antisionistes sont des Juifs orthodoxes (Neturei Karta), d'autres sont des intellectuels de gauche, d'autres encore sont des descendants de survivants. Aucun groupe ne detient le monopole de l'expression juive legitime."},
+
+{t:"Juifs critiques",q:"Quelle distinction centrale les fiches de preparation imposent-elles entre 'pluralisme juif reel' et 'validation automatique d'une these' ?",
+opts:["Le pluralisme juif prouve que toutes les critiques d'Israel sont legitimes","Le pluralisme juif prouve qu'il existe des debats au sein du monde juif, mais ne valide pas automatiquement chaque these — l'argument reste a evaluer sur ses criteres propres","Le pluralisme juif est un mythe entretenu par les defenseurs d'Israel","Le pluralisme juif signifie que la communaute juive ne peut pas etre representee politiquement"],
+ans:1,ex:"<b>C'est la distinction centrale de la fiche 12.</b> Reconnaitre que des Juifs critiquent Israel (pluralisme reel, incontestable) est different d'en conclure que n'importe quelle critique d'Israel est valide parce qu'un Juif la formule. L'argument doit toujours etre evalue selon ses <b>criteres propres</b> : faits, methode, logique, absence de double standard, de diabolisation ou de delegitimation."},
+];
+
+let mode='f',flipped=false;
+let fA=new Set(TH),qA=new Set(TH);
+let fL=[],fi=0,qL=[],qi=0,sc=0,answered=false,done=false,sel=-1;
+
+function bFL(){fL=AF.filter(x=>fA.has(x.t));fi=Math.min(fi,Math.max(0,fL.length-1));flipped=false;}
+function bQL(){qL=AQ.filter(x=>qA.has(x.t));qi=0;sc=0;answered=false;done=false;sel=-1;}
+
+function setMode(m){
+  mode=m;
+  document.getElementById('tf').className='tab'+(m==='f'?' active':'');
+  document.getElementById('tq').className='tab'+(m==='q'?' active':'');
+  document.getElementById('pf').className='pane'+(m==='f'?' active':'');
+  document.getElementById('pq').className='pane'+(m==='q'?' active':'');
+  if(m==='f'){bFL();rFilt('f');rF();}
+  else{bQL();rFilt('q');updateSubmitBar();rQ();}
+}
+
+function rFilt(p){
+  const el=document.getElementById(p+'fr');
+  const a=p==='f'?fA:qA;
+  el.innerHTML=TH.map(t=>`<button class="ft${a.has(t)?' on':''}" onclick="tog('${p}','${t}')">${t}</button>`).join('');
+}
+
+function tog(p,t){
+  const a=p==='f'?fA:qA;
+  if(a.has(t)){if(a.size>1)a.delete(t);}else a.add(t);
+  rFilt(p);
+  if(p==='f'){fi=0;bFL();rF();}else{bQL();rQ();}
+}
+
+function rF(){
+  if(!fL.length)return;
+  const it=fL[fi];
+  const pct=Math.round((fi/fL.length)*100);
+  document.getElementById('fp').style.width=pct+'%';
+  document.getElementById('fl').textContent='Carte '+(fi+1)+' / '+fL.length;
+  document.getElementById('fc2').textContent=(fi+1)+' / '+fL.length;
+  document.getElementById('cw').className='cw'+(flipped?' flip':'');
+  document.getElementById('cfront').innerHTML='<span class="ctag">'+it.t+'</span><p class="cq">'+it.q+'</p><p class="ch">Cliquer pour reveler la reponse</p>';
+  document.getElementById('cback').innerHTML='<span class="ctag">'+it.t+'</span><p class="ca">'+it.a+'</p><p class="cs">Source : '+it.src+'</p>';
+  document.getElementById('fpv').disabled=(fi===0);
+  document.getElementById('fnx').disabled=(fi===fL.length-1);
+}
+
+function doFlip(){flipped=!flipped;document.getElementById('cw').className='cw'+(flipped?' flip':'');}
+function mf(d){fi=Math.max(0,Math.min(fL.length-1,fi+d));flipped=false;rF();}
+
+function rQ(){
+  const area=document.getElementById('qa'),nav=document.getElementById('qnav');
+  if(done){rScore();return;}
+  if(!qL.length){area.innerHTML='<p style="color:var(--ink2);font-size:.9rem;padding:1rem 0">Selectionner au moins un theme.</p>';nav.style.display='none';return;}
+  const it=qL[qi];
+  const pct=Math.round((qi/qL.length)*100);
+  document.getElementById('qp').style.width=pct+'%';
+  document.getElementById('ql').textContent='Question '+(qi+1)+' / '+qL.length;
+  const L=['A','B','C','D'];
+  const opts=it.opts.map((o,i)=>{
+    let c='opt';
+    if(answered){
+      if(i===it.ans)c+=' ok lk';
+      else if(i===sel)c+=' ko lk';
+      else c+=' dm lk';
+    }
+    return '<div class="'+c+'" onclick="ans('+i+')"><div class="ol">'+L[i]+'</div><span>'+o+'</span></div>';
+  }).join('');
+  area.innerHTML='<div class="qcard"><div class="qn">'+it.t+' &middot; Question '+(qi+1)+' / '+qL.length+'</div><p class="qq">'+it.q+'</p>'+opts+'<div class="ex'+(answered?' show':'')+'">'+it.ex+'</div></div>';
+  nav.style.display='flex';
+  document.getElementById('qs').textContent='Score : '+sc+' / '+qi;
+  document.getElementById('qnx').disabled=!answered;
+}
+
+function ans(i){
+  if(answered)return;
+  answered=true;sel=i;
+  if(i===qL[qi].ans)sc++;
+  updateSubmitBar();
+  rQ();
+}
+
+function nextQ(){
+  if(!answered)return;
+  qi++;answered=false;sel=-1;
+  if(qi>=qL.length)done=true;
+  updateSubmitBar();
+  rQ();
+}
+
+let userEmail = '';
+
+function startQuiz(){
+  const inp = document.getElementById('emailinput');
+  const err = document.getElementById('errmsg');
+  const v = inp.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){
+    inp.classList.add('err');
+    err.classList.add('show');
+    return;
+  }
+  inp.classList.remove('err');
+  err.classList.remove('show');
+  userEmail = v;
+  document.getElementById('overlay').classList.add('hidden');
+  // Show submit bar when in QCM mode
+  updateSubmitBar();
+}
+
+function updateSubmitBar(){
+  const bar = document.getElementById('submitbar');
+  if(mode !== 'q' || done){ bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  document.getElementById('sb-email').textContent = userEmail;
+  const answered_count = qi + (answered ? 1 : 0);
+  const pct = qL.length ? Math.round((sc / Math.max(answered_count,1))*100) : 0;
+  document.getElementById('sb-score').textContent =
+    answered_count + ' / ' + qL.length + ' questions — ' + sc + ' correcte(s)' +
+    (answered_count > 0 ? ' (' + Math.round((sc/answered_count)*100) + '%)' : '');
+}
+
+function rScore(){
+  const total_answered = qi; // qi is incremented after each answer before done=true
+  const pct = total_answered > 0 ? Math.round((sc/total_answered)*100) : 0;
+  const pct_total = Math.round((sc/qL.length)*100);
+  const msg = pct_total>=80?"Excellente maitrise.":pct_total>=60?"Bon socle — quelques points a consolider.":"Des notions cles a retravailler sur les flashcards.";
+  const col = pct_total>=80?"#2D6A4F":pct_total>=60?"#2A4B8D":"#B03A2E";
+  const themesActifs = [...qA].join(', ');
+  const now = new Date().toLocaleString('fr-FR');
+  document.getElementById('submitbar').classList.remove('visible');
+  document.getElementById('qa').innerHTML =
+    '<div class="sb">'+
+    '<div class="sbig">'+sc+' / '+qL.length+'</div>'+
+    '<div class="ssub">'+msg+'</div>'+
+    '<div class="sbw"><div class="sbt"><div class="sbf" style="width:'+pct_total+'%;background:'+col+'"></div></div></div>'+
+    '<div style="font-size:.78rem;color:var(--ink2);margin-bottom:1rem">Participant : <b>'+userEmail+'</b></div>'+
+    '<div class="send-status" id="sendst">Enregistrement dans Google Sheets...</div>'+
+    '<button class="btn bta" style="margin-top:.75rem" onclick="resetQ()">Recommencer le QCM</button>'+
+    '</div>';
+  document.getElementById('qnav').style.display='none';
+  document.getElementById('qp').style.width='100%';
+  document.getElementById('ql').textContent='Termine';
+  sendToSheets(userEmail, sc, qL.length, pct_total, msg, themesActifs, now, 'complet');
+}
+
+function showToast(msg, duration){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration||2800);
+}
+
+async function submitNow(){
+  const btn = document.getElementById('submitbtn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours...';
+  const answered_count = qi + (answered ? 1 : 0);
+  const pct = answered_count > 0 ? Math.round((sc/answered_count)*100) : 0;
+  const themesActifs = [...qA].join(', ');
+  const now = new Date().toLocaleString('fr-FR');
+  const ok = await sendToSheets(userEmail, sc, answered_count, pct,
+    'Soumission partielle ('+answered_count+'/'+qL.length+')', themesActifs, now, 'partiel');
+  if(ok){
+    showToast('Resultats enregistres dans Google Sheets');
+  }
+  btn.disabled = false;
+  btn.textContent = '\u2193 Soumettre mes resultats';
+}
+
+// ── Remplacer cette URL par l'URL de deploiement Google Apps Script ──
+const GAS_URL = "https://drive.google.com/drive/u/1/folders/1dTlqHkboAkYFQ2TQ2rXT5HxzSqki8z6V";
+
+async function sendToSheets(email, score, total, pct, appreciation, themes, date, type){
+  const statusEl = document.getElementById('sendst');
+
+  if(!GAS_URL || GAS_URL === "https://drive.google.com/drive/u/1/folders/1dTlqHkboAkYFQ2TQ2rXT5HxzSqki8z6V"){
+    if(statusEl) statusEl.textContent = "URL Apps Script non configuree.";
+    return false;
+  }
+
+  return new Promise((resolve) => {
+    try {
+      const iframeId = 'gas_iframe_' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeId;
+      iframe.id   = iframeId;
+      iframe.style.cssText = 'display:none;position:absolute;width:0;height:0';
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GAS_URL;
+      form.target = iframeId;
+      form.style.display = 'none';
+
+      const fields = { email, score, total, pct, appreciation, themes, date, type };
+      Object.entries(fields).forEach(([k, v]) => {
+        const inp = document.createElement('input');
+        inp.type  = 'hidden';
+        inp.name  = k;
+        inp.value = v;
+        form.appendChild(inp);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
+        try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e){}
+        resolve(true);
+      }, 3000);
+
+    } catch(e) {
+      if(statusEl) statusEl.textContent = "Erreur : " + e.message;
+      resolve(false);
+    }
+  });
+}
+
+function resetQ(){
+  bQL();
+  updateSubmitBar();
+  rQ();
+}
+
+
+bFL();rFilt('f');rF();
+
+
+
+</script>
+</body>
+</html>
