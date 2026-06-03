@@ -602,53 +602,31 @@ async function submitNow(){
 }
 
 // ── Remplacer cette URL par l'URL de deploiement Google Apps Script ──
-const GAS_URL = "https://drive.google.com/drive/u/1/folders/1dTlqHkboAkYFQ2TQ2rXT5HxzSqki8z6V";
+const GAS_URL = "COLLER_ICI_URL_APPS_SCRIPT";
 
 async function sendToSheets(email, score, total, pct, appreciation, themes, date, type){
   const statusEl = document.getElementById('sendst');
 
-  if(!GAS_URL || GAS_URL === "https://drive.google.com/drive/u/1/folders/1dTlqHkboAkYFQ2TQ2rXT5HxzSqki8z6V"){
+  if(!GAS_URL || GAS_URL === "COLLER_ICI_URL_APPS_SCRIPT"){
     if(statusEl) statusEl.textContent = "URL Apps Script non configuree.";
     return false;
   }
 
+  // Envoi GET : paramètres dans l'URL, aucun problème CORS
+  const params = new URLSearchParams({ email, score, total, pct, appreciation, themes, date, type });
+  const url = GAS_URL + "?" + params.toString();
+
   return new Promise((resolve) => {
-    try {
-      const iframeId = 'gas_iframe_' + Date.now();
-      const iframe = document.createElement('iframe');
-      iframe.name = iframeId;
-      iframe.id   = iframeId;
-      iframe.style.cssText = 'display:none;position:absolute;width:0;height:0';
-      document.body.appendChild(iframe);
-
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = GAS_URL;
-      form.target = iframeId;
-      form.style.display = 'none';
-
-      const fields = { email, score, total, pct, appreciation, themes, date, type };
-      Object.entries(fields).forEach(([k, v]) => {
-        const inp = document.createElement('input');
-        inp.type  = 'hidden';
-        inp.name  = k;
-        inp.value = v;
-        form.appendChild(inp);
-      });
-
-      document.body.appendChild(form);
-      form.submit();
-
-      setTimeout(() => {
-        if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
-        try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e){}
-        resolve(true);
-      }, 3000);
-
-    } catch(e) {
-      if(statusEl) statusEl.textContent = "Erreur : " + e.message;
-      resolve(false);
-    }
+    const img = new Image();
+    img.onload = img.onerror = () => {
+      if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
+      resolve(true);
+    };
+    img.src = url;
+    setTimeout(() => {
+      if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
+      resolve(true);
+    }, 4000);
   });
 }
 
