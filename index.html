@@ -605,15 +605,31 @@ function showResumeBar(s){
 }
 
 function resumeProgress(){
-  const ok = loadProgress();
   const bar = document.getElementById('resumebar');
   if(bar) bar.remove();
-  if(ok){
-    bFL(); bQL();
-    rFilt('f'); rFilt('q');
-    setMode(mode === 'q' ? 'q' : 'q'); // toujours reprendre sur QCM
-    updateSubmitBar();
-  }
+
+  // 1. Charger la progression sauvegardée dans les variables globales
+  const ok = loadProgress();
+  if(!ok){ updateSubmitBar(); return; }
+
+  // 2. Reconstruire les listes SANS remettre qi/sc à zéro
+  fL = AF.filter(x => fA.has(x.t));
+  qL = AQ.filter(x => qA.has(x.t));
+  answered = false;
+  sel = -1;
+  done = false;
+
+  // 3. Afficher les filtres et passer en mode QCM
+  rFilt('f');
+  rFilt('q');
+  mode = 'q';
+  document.getElementById('tf').className = 'tab';
+  document.getElementById('tq').className = 'tab active';
+  document.getElementById('pf').className = 'pane';
+  document.getElementById('pq').className = 'pane active';
+
+  updateSubmitBar();
+  rQ();
 }
 
 function restartProgress(){
