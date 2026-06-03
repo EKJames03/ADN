@@ -588,6 +588,7 @@ async function submitNow(){
   const btn = document.getElementById('submitbtn');
   btn.disabled = true;
   btn.textContent = 'Envoi en cours...';
+  try {
   const answered_count = qi + (answered ? 1 : 0);
   const pct = answered_count > 0 ? Math.round((sc/answered_count)*100) : 0;
   const themesActifs = [...qA].join(', ');
@@ -597,8 +598,13 @@ async function submitNow(){
   if(ok){
     showToast('Resultats enregistres dans Google Sheets');
   }
+  } catch(e) { console.error(e); }
   btn.disabled = false;
   btn.textContent = '\u2193 Soumettre mes resultats';
+  setTimeout(() => {
+    const st = document.getElementById('sendst');
+    if(st) st.textContent = '';
+  }, 4000);
 }
 
 // ── Remplacer cette URL par l'URL de deploiement Google Apps Script ──
