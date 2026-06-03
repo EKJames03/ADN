@@ -86,9 +86,9 @@ main{max-width:800px;margin:0 auto;padding:1.5rem}
 <body>
 <div class="overlay" id="overlay">
   <div class="onboard">
-    <div class="badge">Seance 2 — Quiz de revision</div>
-    <h2>Fiches de debat<br>Conflit israelo-palestinien</h2>
-    <p>60 questions QCM &middot; 36 flashcards<br>Entrez votre email pour demarrer.<br>Vos resultats seront enregistres a la fin du quiz.</p>
+    <div class="badge">Atelier Defense Narrative - Entrainement</div>
+    <h2>Atelier Defense Narrative<br><em>Entrainement au debat</em></h2>
+    <p>Revisez ou approfondissez vos connaissances avec des flashcards et des QCM sur les sujets cles du debat.<br><br>Entrez votre email pour demarrer.<br>Vos resultats seront enregistres automatiquement.</p>
     <input class="einput" type="email" id="emailinput" placeholder="prenom.nom@example.com" autocomplete="email">
     <div class="errmsg" id="errmsg">Veuillez entrer une adresse email valide.</div>
     <button class="btn bta" style="width:100%;padding:.7rem" onclick="startQuiz()">Commencer &#8594;</button>
@@ -511,6 +511,7 @@ function ans(i){
   answered=true;sel=i;
   if(i===qL[qi].ans)sc++;
   updateSubmitBar();
+  saveProgress();
   rQ();
 }
 
@@ -519,10 +520,49 @@ function nextQ(){
   qi++;answered=false;sel=-1;
   if(qi>=qL.length)done=true;
   updateSubmitBar();
+  saveProgress();
   rQ();
 }
 
 let userEmail = '';
+
+// ── Persistance de la progression ───────────────────────────
+function saveProgress(){
+  try {
+    const state = {
+      email  : userEmail,
+      qi     : qi,
+      sc     : sc,
+      done   : done,
+      qThemes: [...qA],
+      fThemes: [...fA],
+      fi     : fi,
+      mode   : mode
+    };
+    localStorage.setItem('adn_progress', JSON.stringify(state));
+  } catch(e){}
+}
+
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem('adn_progress');
+    if(!raw) return false;
+    const s = JSON.parse(raw);
+    if(!s.email) return false;
+    userEmail = s.email;
+    qi        = s.qi   || 0;
+    sc        = s.sc   || 0;
+    done      = s.done || false;
+    fi        = s.fi   || 0;
+    if(s.qThemes) qA = new Set(s.qThemes);
+    if(s.fThemes) fA = new Set(s.fThemes);
+    return true;
+  } catch(e){ return false; }
+}
+
+function clearProgress(){
+  try { localStorage.removeItem('adn_progress'); } catch(e){}
+}
 
 function startQuiz(){
   const inp = document.getElementById('emailinput');
@@ -536,8 +576,51 @@ function startQuiz(){
   inp.classList.remove('err');
   err.classList.remove('show');
   userEmail = v;
+  // Vérifie si une progression existe pour cet email
+  const saved = localStorage.getItem('adn_progress');
+  if(saved){
+    try {
+      const s = JSON.parse(saved);
+      if(s.email === v && s.qi > 0 && !s.done){
+        document.getElementById('overlay').classList.add('hidden');
+        showResumeBar(s);
+        return;
+      }
+    } catch(e){}
+  }
   document.getElementById('overlay').classList.add('hidden');
-  // Show submit bar when in QCM mode
+  updateSubmitBar();
+}
+
+function showResumeBar(s){
+  // Bandeau proposant de reprendre ou recommencer
+  const bar = document.createElement('div');
+  bar.id = 'resumebar';
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:50;background:#2A4B8D;color:#fff;padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:DM Sans,sans-serif;font-size:.85rem';
+  bar.innerHTML = '<span>&#128190; Progression sauvegardee : question '+(s.qi+1)+'/'+s.qThemes.length*5+', score '+s.sc+'.</span>'
+    + '<span style="display:flex;gap:.6rem">'
+    + '<button onclick="resumeProgress()" style="padding:.4rem .9rem;background:#fff;color:#2A4B8D;border:none;border-radius:4px;cursor:pointer;font-weight:500;font-size:.8rem">Reprendre</button>'
+    + '<button onclick="restartProgress()" style="padding:.4rem .9rem;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:4px;cursor:pointer;font-size:.8rem">Recommencer</button>'
+    + '</span>';
+  document.body.prepend(bar);
+}
+
+function resumeProgress(){
+  const ok = loadProgress();
+  const bar = document.getElementById('resumebar');
+  if(bar) bar.remove();
+  if(ok){
+    bFL(); bQL();
+    rFilt('f'); rFilt('q');
+    setMode(mode === 'q' ? 'q' : 'q'); // toujours reprendre sur QCM
+    updateSubmitBar();
+  }
+}
+
+function restartProgress(){
+  clearProgress();
+  const bar = document.getElementById('resumebar');
+  if(bar) bar.remove();
   updateSubmitBar();
 }
 
@@ -561,6 +644,7 @@ function rScore(){
   const col = pct_total>=80?"#2D6A4F":pct_total>=60?"#2A4B8D":"#B03A2E";
   const themesActifs = [...qA].join(', ');
   const now = new Date().toLocaleString('fr-FR');
+  clearProgress();
   document.getElementById('submitbar').classList.remove('visible');
   document.getElementById('qa').innerHTML =
     '<div class="sb">'+
@@ -632,6 +716,7 @@ async function sendToSheets(email, score, total, pct, appreciation, themes, date
 }
 
 function resetQ(){
+  clearProgress();
   bQL();
   updateSubmitBar();
   rQ();
