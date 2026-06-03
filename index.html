@@ -763,9 +763,9 @@ function restartProgress(){
 
 function updateSubmitBar(){
   const bar = document.getElementById('submitbar');
-  if(mode !== 'q' || done){ bar.classList.remove('visible'); return; }
+  // Toujours visible en mode QCM si email saisi
+  if(mode !== 'q' || !userEmail){ bar.classList.remove('visible'); return; }
   bar.classList.add('visible');
-  document.getElementById('sb-email').textContent = userEmail;
 
   const answered_count = qi + (answered ? 1 : 0);
   const pct_correct = answered_count > 0 ? Math.round((sc/answered_count)*100) : 0;
@@ -773,45 +773,57 @@ function updateSubmitBar(){
   // Calcul de progression par theme actif
   const activeThemes = [...qA];
   let themeLines = activeThemes.map(t => {
-    const themeQs  = AQ.filter(q => q.t === t);
-    const answered_t = themeQs.filter((q,i) => {
-      const globalI = AQ.indexOf(q);
-      return globalI < qi || (globalI === qi && answered);
+    const themeQs = AQ.filter(q => q.t === t);
+    const answered_t = themeQs.filter(q => {
+      const gi = AQ.indexOf(q);
+      return gi < qi || (gi === qi && answered);
     }).length;
-    const correct_t = themeQs.filter((q,i) => {
-      const globalI = AQ.indexOf(q);
-      return history[globalI] && history[globalI].correct;
+    const correct_t = themeQs.filter(q => {
+      const gi = AQ.indexOf(q);
+      return history[gi] && history[gi].correct;
     }).length;
     const pct_t = answered_t > 0 ? Math.round((correct_t/answered_t)*100) : 0;
-    const col = pct_t>=80?'#2D6A4F':pct_t>=60?'#2A4B8D':'#B03A2E';
-    const done_t = answered_t >= themeQs.length;
-    return {t, answered_t, total:themeQs.length, correct_t, pct_t, col, done_t};
+    const done_t = answered_t >= themeQs.length && themeQs.length > 0;
+    return {t, answered_t, total:themeQs.length, correct_t, pct_t, done_t};
   });
 
-  // Vérifie si au moins un thème est completement fini
   const anyModuleDone = themeLines.some(tl => tl.done_t);
 
-  // Affichage score global
-  document.getElementById('sb-score').textContent =
-    answered_count + ' / ' + qL.length + ' questions — ' + sc + ' correcte(s)' +
-    (answered_count > 0 ? ' (' + pct_correct + '%)' : '');
+  // Info : email + score global + detail par theme repondu
+  const themeDetail = themeLines
+    .filter(tl => tl.answered_t > 0)
+    .map(tl => {
+      const col = tl.pct_t>=80?'#2D6A4F':tl.pct_t>=60?'#2A4B8D':'#B03A2E';
+      const done_icon = tl.done_t ? ' &#10003;' : '';
+      return `<span style="margin-right:.6rem;font-size:.72rem;color:${col}">${tl.t} : ${tl.pct_t}%${done_icon}</span>`;
+    }).join('');
 
-  // Bouton toujours visible, label change selon progression
+  document.getElementById('sb-email').textContent = userEmail;
+  document.getElementById('sb-score').innerHTML =
+    `${answered_count} / ${qL.length} questions &nbsp;·&nbsp; ${sc} correcte(s)` +
+    (pct_correct > 0 ? ` &nbsp;<b>(${pct_correct}%)</b>` : '') +
+    (themeDetail ? `<br><span style="display:block;margin-top:.2rem">${themeDetail}</span>` : '');
+
+  // Bouton : toujours present, label selon etat
   const btn = document.getElementById('submitbtn');
   if(btn){
-    const doneThemes = themeLines.filter(tl=>tl.done_t);
-    if(doneThemes.length > 0){
-      btn.innerHTML = '&#10003; Module termine — Sauvegarder / Continuer';
+    btn.style.display = 'flex';
+    if(anyModuleDone){
+      btn.innerHTML = '&#10003; Module termine — Sauvegarder &amp; Continuer';
       btn.style.background = '#E8F5EE';
       btn.style.borderColor = '#2D6A4F';
       btn.style.color = '#1B4332';
+    } else if(answered_count > 0){
+      btn.innerHTML = '&#128190; Sauvegarder mes resultats (' + answered_count + ' rep.)';
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      btn.style.color = '';
     } else {
       btn.innerHTML = '&#128190; Sauvegarder mes resultats';
       btn.style.background = '';
       btn.style.borderColor = '';
       btn.style.color = '';
     }
-    btn.style.display = 'flex';
   }
 }
 
