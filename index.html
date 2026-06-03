@@ -438,6 +438,7 @@ ans:1,ex:"<b>C'est la distinction centrale de la fiche 12.</b> Reconnaitre que d
 let mode='f',flipped=false;
 let fA=new Set(TH),qA=new Set(TH);
 let fL=[],fi=0,qL=[],qi=0,sc=0,answered=false,done=false,sel=-1;
+let history=[]; // [{qi, sel, correct}] — historique des réponses
 
 function bFL(){fL=AF.filter(x=>fA.has(x.t));fi=Math.min(fi,Math.max(0,fL.length-1));flipped=false;}
 function bQL(){qL=AQ.filter(x=>qA.has(x.t));qi=0;sc=0;answered=false;done=false;sel=-1;}
@@ -482,34 +483,96 @@ function rF(){
 function doFlip(){flipped=!flipped;document.getElementById('cw').className='cw'+(flipped?' flip':'');}
 function mf(d){fi=Math.max(0,Math.min(fL.length-1,fi+d));flipped=false;rF();}
 
+// Index de la question affichée (peut différer de qi en mode review)
+let viewQi = -1; // -1 = afficher la question courante
+
 function rQ(){
   const area=document.getElementById('qa'),nav=document.getElementById('qnav');
   if(done){rScore();return;}
   if(!qL.length){area.innerHTML='<p style="color:var(--ink2);font-size:.9rem;padding:1rem 0">Selectionner au moins un theme.</p>';nav.style.display='none';return;}
-  const it=qL[qi];
+
+  // Question à afficher : en review ou courante
+  const displayQi = (viewQi >= 0 && viewQi < qi) ? viewQi : qi;
+  const inReview  = (viewQi >= 0 && viewQi < qi);
+  const it        = qL[displayQi];
+  const h         = history[displayQi]; // réponse historique si existe
+
   const pct=Math.round((qi/qL.length)*100);
   document.getElementById('qp').style.width=pct+'%';
-  document.getElementById('ql').textContent='Question '+(qi+1)+' / '+qL.length;
+  document.getElementById('ql').textContent='Question '+(displayQi+1)+' / '+qL.length;
+
   const L=['A','B','C','D'];
+  const isAnswered = inReview ? !!h : answered;
+  const selI       = inReview ? (h ? h.sel : -1) : sel;
+  const ansI       = it.ans;
+
   const opts=it.opts.map((o,i)=>{
     let c='opt';
-    if(answered){
-      if(i===it.ans)c+=' ok lk';
-      else if(i===sel)c+=' ko lk';
+    if(isAnswered){
+      if(i===ansI)c+=' ok lk';
+      else if(i===selI)c+=' ko lk';
       else c+=' dm lk';
     }
-    return '<div class="'+c+'" onclick="ans('+i+')"><div class="ol">'+L[i]+'</div><span>'+o+'</span></div>';
+    return '<div class="'+c+'" onclick="'+(inReview?'':'ans('+i+')')+'"><div class="ol">'+L[i]+'</div><span>'+o+'</span></div>';
   }).join('');
-  area.innerHTML='<div class="qcard"><div class="qn">'+it.t+' &middot; Question '+(qi+1)+' / '+qL.length+'</div><p class="qq">'+it.q+'</p>'+opts+'<div class="ex'+(answered?' show':'')+'">'+it.ex+'</div></div>';
+
+  // Boutons de navigation
+  const canPrev = displayQi > 0;
+  const canNext = inReview ? true : answered;
+  const nextLabel = inReview && displayQi < qi-1 ? 'Suivante &#8594;' : inReview && displayQi === qi-1 ? 'Question en cours &#8594;' : 'Question suivante &#8594;';
+
+  const reviewBadge = inReview ? '<span style="font-size:.7rem;background:#EBE8E0;color:#5A5650;padding:.15rem .6rem;border-radius:3px;margin-left:.5rem">Révision</span>' : '';
+
+  area.innerHTML=
+    '<div class="qcard">'+
+    '<div class="qn">'+it.t+' &middot; Question '+(displayQi+1)+' / '+qL.length+reviewBadge+'</div>'+
+    '<p class="qq">'+it.q+'</p>'+
+    opts+
+    '<div class="ex'+(isAnswered?' show':'')+'">'+it.ex+'</div>'+
+    '</div>';
+
   nav.style.display='flex';
   document.getElementById('qs').textContent='Score : '+sc+' / '+qi;
-  document.getElementById('qnx').disabled=!answered;
+  document.getElementById('qnx').disabled=!canNext;
+  document.getElementById('qnx').textContent='';
+  document.getElementById('qnx').innerHTML=nextLabel;
+
+  // Bouton précédent
+  let prevBtn = document.getElementById('qprev');
+  if(!prevBtn){
+    prevBtn = document.createElement('button');
+    prevBtn.id = 'qprev';
+    prevBtn.className = 'btn';
+    nav.prepend(prevBtn);
+  }
+  prevBtn.textContent = '← Précédente';
+  prevBtn.disabled = !canPrev;
+  prevBtn.onclick = () => {
+    viewQi = displayQi - 1;
+    rQ();
+  };
+
+  // Bouton suivant : comportement selon review ou non
+  document.getElementById('qnx').onclick = () => {
+    if(inReview){
+      if(displayQi < qi - 1){
+        viewQi = displayQi + 1;
+      } else {
+        viewQi = -1; // retour à la question courante
+      }
+      rQ();
+    } else {
+      nextQ();
+    }
+  };
 }
 
 function ans(i){
   if(answered)return;
   answered=true;sel=i;
-  if(i===qL[qi].ans)sc++;
+  const correct = (i===qL[qi].ans);
+  if(correct)sc++;
+  history[qi] = {sel:i, correct:correct};
   updateSubmitBar();
   saveProgress();
   rQ();
@@ -517,7 +580,7 @@ function ans(i){
 
 function nextQ(){
   if(!answered)return;
-  qi++;answered=false;sel=-1;
+  qi++;answered=false;sel=-1;viewQi=-1;
   if(qi>=qL.length)done=true;
   updateSubmitBar();
   saveProgress();
@@ -537,7 +600,8 @@ function saveProgress(){
       qThemes: [...qA],
       fThemes: [...fA],
       fi     : fi,
-      mode   : mode
+      mode   : mode,
+      history: history
     };
     localStorage.setItem('adn_progress', JSON.stringify(state));
   } catch(e){}
@@ -556,6 +620,7 @@ function loadProgress(){
     fi        = s.fi   || 0;
     if(s.qThemes) qA = new Set(s.qThemes);
     if(s.fThemes) fA = new Set(s.fThemes);
+    if(s.history) history = s.history;
     return true;
   } catch(e){ return false; }
 }
@@ -618,6 +683,7 @@ function resumeProgress(){
   answered = false;
   sel = -1;
   done = false;
+  viewQi = -1;
 
   // 3. Afficher les filtres et passer en mode QCM
   rFilt('f');
@@ -732,6 +798,8 @@ async function sendToSheets(email, score, total, pct, appreciation, themes, date
 
 function resetQ(){
   clearProgress();
+  history=[];
+  viewQi=-1;
   bQL();
   updateSubmitBar();
   rQ();
