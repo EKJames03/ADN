@@ -891,17 +891,19 @@ async function submitNow(){
 
   try {
     await sendToSheets(userEmail, sc, answered_count, pct,
-      type === 'module' ? 'Module(s) termine(s) : '+doneThemes.join(', ') : 'Sauvegarde partielle',
+      type === 'module' ? 'Module(s) termine(s) : '+doneThemes.join(', ') : 'Sauvegarde en cours ('+answered_count+' reponses)',
       themesTraites, now, type);
-  } catch(e){ console.error(e); }
+    showToast(modulesDone ? 'Resultats envoyes par mail ✓' : 'Resultats sauvegardes et envoyes ✓');
+  } catch(e){
+    console.error(e);
+    showToast('Erreur envoi — reessayer');
+  }
 
   btn.disabled = false;
   updateSubmitBar();
 
   if(modulesDone){
     showModuleEndModal(doneThemes, pct);
-  } else {
-    showToast('Resultats sauvegardes');
   }
 }
 
