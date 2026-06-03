@@ -617,9 +617,7 @@ async function sendToSheets(email, score, total, pct, appreciation, themes, date
   const url = GAS_URL + "?" + params.toString();
 
   return new Promise((resolve) => {
-  
-    console.log("Envoi vers :", url);
-	const img = new Image();
+    const img = new Image();
     img.onload = img.onerror = () => {
       if(statusEl) statusEl.textContent = "Resultats enregistres dans Google Sheets.";
       resolve(true);
