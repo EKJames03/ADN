@@ -607,11 +607,6 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbwPUAbj8ICdZf2WyPhInvud
 async function sendToSheets(email, score, total, pct, appreciation, themes, date, type){
   const statusEl = document.getElementById('sendst');
 
-  if(!GAS_URL || GAS_URL === "https://script.google.com/macros/s/AKfycbwPUAbj8ICdZf2WyPhInvudc8CW-svq3_bUNGlHKDjGg3B9MYdZC3vRO68YGkLUNk-r/exec"){
-    if(statusEl) statusEl.textContent = "URL Apps Script non configuree.";
-    return false;
-  }
-
   // Envoi GET : paramètres dans l'URL, aucun problème CORS
   const params = new URLSearchParams({ email, score, total, pct, appreciation, themes, date, type });
   const url = GAS_URL + "?" + params.toString();
